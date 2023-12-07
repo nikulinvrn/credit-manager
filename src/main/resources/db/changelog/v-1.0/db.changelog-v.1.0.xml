@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <include file="001-changeset-customers-table.xml" relativeToChangelogFile="true"/>
+    <include file="010-changeset-banks-table.xml" relativeToChangelogFile="true"/>
+    <include file="020-changeset-credit-types-table.xml" relativeToChangelogFile="true"/>
+    <include file="030-changeset-loan-offers-table.xml" relativeToChangelogFile="true"/>
+    <include file="040-changeset-payments-table.xml" relativeToChangelogFile="true"/>
+    <include file="050-changeset-customers-banks-table.xml" relativeToChangelogFile="true"/>
+    <include file="060-changeset-load-data.xml" relativeToChangelogFile="true"/>
+
+
+</databaseChangeLog>
+

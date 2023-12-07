@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="2150e30e-6f3d" author="Nikulin">
+        <sqlFile dbms="postgresql"
+                 encoding="UTF8"
+                 endDelimiter="\n--GO"
+                 splitStatements="true"
+                 stripComments="true"
+                 path="001-create-customers-table.sql"
+                 relativeToChangelogFile="true"/>
+        <rollback>
+            <sqlFile dbms="postgresql"
+                     encoding="UTF8"
+                     endDelimiter="\n--GO"
+                     splitStatements="true"
+                     stripComments="true"
+                     path="001-drop-customers-table.sql"
+                     relativeToChangelogFile="true"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
+
