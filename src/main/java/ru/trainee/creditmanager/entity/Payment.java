@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -16,30 +14,26 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "payments")
-public class Payment  extends BaseEntity{
+public class Payment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "payment_date")
-    private LocalDate paymentDate;
+    private LocalDate date;
 
-    @Column(name = "principal_of_payment")
-    private BigDecimal principalOfPayment;
+    //TODO: переделать сущность на BigDecimal?
 
-    @Column(name = "interest_of_payment")
-    private BigDecimal interestOfPayment;
+    private Double principalOfPayment;
 
-    @Column(name = "sum_of_payment")
-    private BigDecimal sumOfPayment;
+    private Double interestOfPayment;
 
-    @Column(name = "balance_of_debt")
-    private BigDecimal balanceOfDebt;
+    private Double sumOfPayment;
 
-    @Column(name = "is_payed")
+    private Double balanceOfDebt;
+
     private boolean isPayed;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private LoanOffer loanOffer;
 }
