@@ -22,6 +22,8 @@ public class Payment {
 
     private LocalDate date;
 
+    //TODO: переделать сущность на BigDecimal?
+
     private Double principalOfPayment;
 
     private Double interestOfPayment;
