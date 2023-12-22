@@ -7,6 +7,7 @@ import ru.trainee.creditmanager.dto.customer.CustomerResponseShortDTO;
 import ru.trainee.creditmanager.dto.payment.PaymentResponseShortDTO;
 import ru.trainee.creditmanager.entity.Payment;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +24,9 @@ public class LoanOfferResponseDetailDTO {
     BankResponseShortDTO bank;
     CreditTypeResponseShortDTO creditType;
     List<PaymentResponseShortDTO> paymentSchedule; // Сделать краткое представление платежа
-    Integer principalOfCredit;
-    Integer sumOfInterest;
-    Integer sumOfCredit;
+    BigDecimal principalOfCredit;
+    BigDecimal sumOfInterest;
+    BigDecimal sumOfCredit;
     boolean isActive;
     boolean isAccepted;
 

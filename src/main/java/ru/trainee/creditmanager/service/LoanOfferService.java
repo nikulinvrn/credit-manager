@@ -8,10 +8,15 @@ public interface LoanOfferService {
 
     LoanOfferResponseDetailDTO create(LoanOfferCreateDTO dto);
 
-//    LoanOffer findById(Long id);
+    LoanOfferResponseDetailDTO findById(Long id);
+
+
+    void deleteById(Long id);
+
+    void accepting(Long id);
+
 //    List<LoanOffer> findAllByCustomerId(Long customerId);
 //    LoanOffer activating(Long id, boolean status);
-//    LoanOffer accepting(Long id);
 //    LoanOffer deactivating(Long id);
 
 }

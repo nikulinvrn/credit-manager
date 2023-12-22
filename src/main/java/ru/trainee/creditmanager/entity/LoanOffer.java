@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +39,11 @@ public class LoanOffer {
     @OneToMany(mappedBy = "loanOffer")
     private List<Payment> paymentSchedule = new ArrayList<>();
 
-    private Integer principalOfCredit;
+    private BigDecimal principalOfCredit;
 
-    private Integer sumOfInterest;
+    private BigDecimal sumOfInterest;
 
-    private Integer sumOfCredit;
+    private BigDecimal sumOfCredit;
 
     private boolean isActive;
 

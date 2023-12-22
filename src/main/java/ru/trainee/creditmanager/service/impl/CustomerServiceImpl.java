@@ -33,13 +33,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponseDetailDTO create(@NotNull CustomerCreateDTO dto){
-        if(!customerRepository.existsBySeriesAndNumber(dto.getSeries(), dto.getNumber())){
+
+        if(customerRepository.existsBySeriesAndNumber(dto.getSeries(), dto.getNumber())){
+            return customerResponseDetailDTOMapper
+                    .apply(customerRepository.findBySeriesAndNumber(dto.getSeries(), dto.getNumber()));
+        } else {
             Customer createdCustomer = customerRepository
                     .save(customerDTOToCreateEntityMapper.apply(dto));
             return customerResponseDetailDTOMapper.apply(createdCustomer);
-        } else {
-            return customerResponseDetailDTOMapper
-                    .apply(customerRepository.findBySeriesAndNumber(dto.getSeries(), dto.getNumber()));
         }
     }
 

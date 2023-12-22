@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -22,15 +23,13 @@ public class Payment {
 
     private LocalDate date;
 
-    //TODO: переделать сущность на BigDecimal?
+    private BigDecimal principalOfPayment;
 
-    private Double principalOfPayment;
+    private BigDecimal interestOfPayment;
 
-    private Double interestOfPayment;
+    private BigDecimal sumOfPayment;
 
-    private Double sumOfPayment;
-
-    private Double balanceOfDebt;
+    private BigDecimal balanceOfDebt;
 
     private boolean isPayed;
 

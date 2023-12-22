@@ -2,6 +2,7 @@ package ru.trainee.creditmanager.dto.payment;
 
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @EqualsAndHashCode
@@ -12,8 +13,8 @@ import java.time.LocalDate;
 public class PaymentResponseShortDTO {
 
     LocalDate date;
-    Double principalOfPayment;
-    Double interestOfPayment;
-    Double sumOfPayment;
-    Double balanceOfDebt;
+    BigDecimal principalOfPayment;
+    BigDecimal interestOfPayment;
+    BigDecimal sumOfPayment;
+    BigDecimal balanceOfDebt;
 }
