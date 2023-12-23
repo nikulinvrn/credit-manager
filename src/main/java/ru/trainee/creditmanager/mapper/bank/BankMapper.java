@@ -1,15 +1,22 @@
 package ru.trainee.creditmanager.mapper.bank;
 
 import org.springframework.stereotype.Service;
+import ru.trainee.creditmanager.dto.bank.BankCreateDTO;
 import ru.trainee.creditmanager.dto.bank.BankResponseDetailDTO;
+import ru.trainee.creditmanager.dto.bank.BankResponseShortDTO;
 import ru.trainee.creditmanager.entity.Bank;
 
-import java.util.function.Function;
-
 @Service
-public class BankResponseDetailDTOMapper implements Function<Bank, BankResponseDetailDTO> {
-    @Override
-    public BankResponseDetailDTO apply(Bank bank) {
+public class BankMapper {
+
+    public BankResponseShortDTO toBankShortDto(Bank bank){
+        return new BankResponseShortDTO(
+                bank.getId(),
+                bank.getName()
+        );
+    }
+
+    public BankResponseDetailDTO toBankDetailDto(Bank bank) {
 
         Integer customersCost = bank.getCustomers().size();
         Integer loanOffersCost = bank.getLoanOffers().size();
@@ -21,6 +28,16 @@ public class BankResponseDetailDTOMapper implements Function<Bank, BankResponseD
                 customersCost,
                 creditTypesCost,
                 loanOffersCost
+        );
+    }
+
+    public Bank toBankEntity(BankCreateDTO dto) {
+        return new Bank(
+                null,
+                dto.getName(),
+                null,
+                null,
+                null
         );
     }
 }

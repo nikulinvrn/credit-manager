@@ -30,6 +30,21 @@ public class LoanOfferControllerV1 {
         return loanOfferService.create(dto);
     }
 
+
+    @GetMapping("/{id}")
+    @Operation(
+            summary = "Получение деталей кредитного предложения",
+            description = """
+                          Карточка кредитного предложения содержит ...
+                          """
+    )
+    public LoanOfferResponseDetailDTO findById(@PathVariable Long id) {
+
+        return loanOfferService.findById(id);
+    }
+
+
+
     @GetMapping("{id}/accept")
     @Operation(
             summary = "Принятие кредитного предложения",

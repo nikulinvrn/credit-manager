@@ -5,10 +5,8 @@ import ru.trainee.creditmanager.dto.bank.BankResponseShortDTO;
 import ru.trainee.creditmanager.dto.creditType.CreditTypeResponseShortDTO;
 import ru.trainee.creditmanager.dto.customer.CustomerResponseShortDTO;
 import ru.trainee.creditmanager.dto.payment.PaymentResponseShortDTO;
-import ru.trainee.creditmanager.entity.Payment;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode

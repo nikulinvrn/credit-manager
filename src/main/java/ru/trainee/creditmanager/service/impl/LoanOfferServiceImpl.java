@@ -10,9 +10,8 @@ import ru.trainee.creditmanager.entity.LoanOffer;
 import ru.trainee.creditmanager.entity.Payment;
 import ru.trainee.creditmanager.exception.BusinessException;
 import ru.trainee.creditmanager.exception.CreditLimitExceedException;
-import ru.trainee.creditmanager.mapper.loanOffer.LoanOfferResponseDetailDTOMapper;
+import ru.trainee.creditmanager.mapper.loanOffer.LoanOfferMapper;
 import ru.trainee.creditmanager.repository.LoanOfferRepository;
-import ru.trainee.creditmanager.repository.PaymentRepository;
 import ru.trainee.creditmanager.service.*;
 
 import java.math.BigDecimal;
@@ -31,7 +30,7 @@ public class LoanOfferServiceImpl implements LoanOfferService {
     private final CustomerService customerService;
     private final BankService bankService;
     private final CreditTypeService creditTypeService;
-    private final LoanOfferResponseDetailDTOMapper loanOfferResponseDetailDTOMapper;
+    private final LoanOfferMapper loanOfferMapper;
     private final PaymentService paymentService;
 
 
@@ -53,7 +52,7 @@ public class LoanOfferServiceImpl implements LoanOfferService {
                 dto,
                 offer.getCreditType()));
 
-        return loanOfferResponseDetailDTOMapper.apply(offer);
+        return loanOfferMapper.toLoanOfferDetailDto(offer);
     }
 
     @Override
@@ -63,7 +62,7 @@ public class LoanOfferServiceImpl implements LoanOfferService {
         if(loanOfferOptional.isPresent()){
             LoanOffer loanOffer = loanOfferOptional.get();
 
-            return loanOfferResponseDetailDTOMapper.apply(loanOffer);
+            return loanOfferMapper.toLoanOfferDetailDto(loanOffer);
         } else {
             throw new EntityNotFoundException("The loan offer not found. Check id.");
         }

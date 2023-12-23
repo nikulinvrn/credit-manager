@@ -10,9 +10,7 @@ import ru.trainee.creditmanager.dto.customer.CustomerResponseDetailDTO;
 import ru.trainee.creditmanager.dto.customer.CustomerResponseShortDTO;
 import ru.trainee.creditmanager.dto.customer.CustomerUpdateDTO;
 import ru.trainee.creditmanager.entity.Customer;
-import ru.trainee.creditmanager.mapper.customer.CustomerDTOToCreateEntityMapper;
-import ru.trainee.creditmanager.mapper.customer.CustomerResponseDetailDTOMapper;
-import ru.trainee.creditmanager.mapper.customer.CustomerResponseShortDTOMapper;
+import ru.trainee.creditmanager.mapper.customer.CustomerMapper;
 import ru.trainee.creditmanager.repository.CustomerRepository;
 import ru.trainee.creditmanager.service.CustomerService;
 
@@ -27,34 +25,32 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final CustomerResponseDetailDTOMapper customerResponseDetailDTOMapper;
-    private final CustomerDTOToCreateEntityMapper customerDTOToCreateEntityMapper;
-    private final CustomerResponseShortDTOMapper customerResponseShortDTOMapper;
+    private final CustomerMapper customerMapper;
 
     @Override
     public CustomerResponseDetailDTO create(@NotNull CustomerCreateDTO dto){
 
         if(customerRepository.existsBySeriesAndNumber(dto.getSeries(), dto.getNumber())){
-            return customerResponseDetailDTOMapper
-                    .apply(customerRepository.findBySeriesAndNumber(dto.getSeries(), dto.getNumber()));
+            return customerMapper.toCustomerDetailDto(customerRepository
+                    .findBySeriesAndNumber(dto.getSeries(), dto.getNumber()));
         } else {
             Customer createdCustomer = customerRepository
-                    .save(customerDTOToCreateEntityMapper.apply(dto));
-            return customerResponseDetailDTOMapper.apply(createdCustomer);
+                    .save(customerMapper.toCustomerEntity(dto));
+            return customerMapper.toCustomerDetailDto(createdCustomer);
         }
     }
 
     @Override
     public List<CustomerResponseShortDTO> getAllCustomers(PageRequest pageRequest){
         return customerRepository.getAllCustomers(pageRequest).stream()
-                .map(customerResponseShortDTOMapper)
+                .map(customerMapper::toCustomerShortDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<CustomerResponseShortDTO> getAllInactiveCustomers(PageRequest pageRequest){
         return customerRepository.getAllInactiveCustomers(pageRequest).stream()
-                .map(customerResponseShortDTOMapper)
+                .map(customerMapper::toCustomerShortDto)
                 .collect(Collectors.toList());
     }
 
@@ -65,7 +61,7 @@ public class CustomerServiceImpl implements CustomerService {
         if(customerOptional.isPresent()) {
             Customer customer = customerOptional.get();
 
-            return customerResponseDetailDTOMapper.apply(customer);
+            return customerMapper.toCustomerDetailDto(customer);
         } else {
             throw new EntityNotFoundException("Customer not found. Check id.");
         }
@@ -89,7 +85,7 @@ public class CustomerServiceImpl implements CustomerService {
             if (Objects.nonNull(customer.getNumber()))    editingCustomer.setNumber(customer.getNumber());
             if (Objects.nonNull(customer.getEmail()))     editingCustomer.setEmail(customer.getEmail());
 
-            return customerResponseDetailDTOMapper.apply(customerRepository.save(editingCustomer));
+            return customerMapper.toCustomerDetailDto(customerRepository.save(editingCustomer));
         } else {
             throw new EntityNotFoundException("Customer " + customer.getId() + " does not exist. Check id.");
         }

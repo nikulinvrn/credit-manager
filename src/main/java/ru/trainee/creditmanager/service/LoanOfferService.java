@@ -2,7 +2,6 @@ package ru.trainee.creditmanager.service;
 
 import ru.trainee.creditmanager.dto.loanOffer.LoanOfferCreateDTO;
 import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseDetailDTO;
-import ru.trainee.creditmanager.entity.LoanOffer;
 
 public interface LoanOfferService {
 

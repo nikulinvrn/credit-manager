@@ -16,12 +16,10 @@ import ru.trainee.creditmanager.entity.Bank;
 import ru.trainee.creditmanager.entity.CreditType;
 import ru.trainee.creditmanager.entity.Customer;
 import ru.trainee.creditmanager.entity.LoanOffer;
-import ru.trainee.creditmanager.mapper.bank.BankDTOToCreateEntityMapper;
-import ru.trainee.creditmanager.mapper.bank.BankResponseDetailDTOMapper;
-import ru.trainee.creditmanager.mapper.bank.BankResponseShortDTOMapper;
-import ru.trainee.creditmanager.mapper.creditType.CreditTypeResponseShortDTOMapper;
-import ru.trainee.creditmanager.mapper.customer.CustomerResponseShortDTOMapper;
-import ru.trainee.creditmanager.mapper.loanOffer.LoanOfferResponseShortDTOMapper;
+import ru.trainee.creditmanager.mapper.bank.BankMapper;
+import ru.trainee.creditmanager.mapper.creditType.CreditTypeMapper;
+import ru.trainee.creditmanager.mapper.customer.CustomerMapper;
+import ru.trainee.creditmanager.mapper.loanOffer.LoanOfferMapper;
 import ru.trainee.creditmanager.repository.BankRepository;
 import ru.trainee.creditmanager.service.BankService;
 
@@ -36,12 +34,11 @@ import java.util.stream.Collectors;
 public class BankServiceImpl implements BankService {
 
     private final BankRepository bankRepository;
-    private final BankResponseDetailDTOMapper bankResponseDetailDTOMapper;
-    private final BankResponseShortDTOMapper bankResponseShortDTOMapper;
-    private final BankDTOToCreateEntityMapper bankDTOToCreateEntityMapper;
-    private final CustomerResponseShortDTOMapper customerResponseShortDTOMapper;
-    private final CreditTypeResponseShortDTOMapper creditTypeResponseShortDTOMapper;
-    private final LoanOfferResponseShortDTOMapper loanOfferResponseShortDTOMapper;
+
+    private final BankMapper bankMapper;
+    private final CustomerMapper customerMapper;
+    private final CreditTypeMapper creditTypeMapper;
+    private final LoanOfferMapper loanOfferMapper;
 
 
 
@@ -49,10 +46,10 @@ public class BankServiceImpl implements BankService {
     public BankResponseDetailDTO create(@NotNull BankCreateDTO dto) {
         Optional<Bank> bankOptional = bankRepository.findByName(dto.getName());
         if (bankOptional.isEmpty()) {
-            Bank savedBank = bankRepository.save(bankDTOToCreateEntityMapper.apply(dto));
-            return bankResponseDetailDTOMapper.apply(savedBank);
+            Bank savedBank = bankRepository.save(bankMapper.toBankEntity(dto));
+            return bankMapper.toBankDetailDto(savedBank);
         } else {
-            return bankResponseDetailDTOMapper.apply(bankOptional.get());
+            return bankMapper.toBankDetailDto(bankOptional.get());
         }
     }
 
@@ -62,7 +59,7 @@ public class BankServiceImpl implements BankService {
     public BankResponseDetailDTO getBankById(Long id) {
         Optional<Bank> bankOptional = bankRepository.getBankById(id);
         if(bankOptional.isPresent()){
-            return bankResponseDetailDTOMapper.apply(bankOptional.get());
+            return bankMapper.toBankDetailDto(bankOptional.get());
         } else {
             throw new EntityNotFoundException("Bank id: " + id + " does not exist!");
         }
@@ -90,7 +87,7 @@ public class BankServiceImpl implements BankService {
         List<CustomerResponseShortDTO> customersResponse;
         if (Objects.nonNull(customers)) {
             customersResponse = customers.stream()
-                    .map(customerResponseShortDTOMapper)
+                    .map(customerMapper::toCustomerShortDto)
                     .toList();
         } else {
             customersResponse = new ArrayList<>();
@@ -116,7 +113,7 @@ public class BankServiceImpl implements BankService {
         List<CreditTypeResponseShortDTO> creditTypeResponse;
         if (Objects.nonNull(creditTypes)) {
             creditTypeResponse = creditTypes.stream()
-                    .map(creditTypeResponseShortDTOMapper)
+                    .map(creditTypeMapper::toCreditTypeShortDto)
                     .toList();
         } else {
             creditTypeResponse = new ArrayList<>();
@@ -142,7 +139,7 @@ public class BankServiceImpl implements BankService {
         List<LoanOfferResponseShortDTO> loanOffersResponse;
         if (Objects.nonNull(loanOffers)) {
             loanOffersResponse = loanOffers.stream()
-                    .map(loanOfferResponseShortDTOMapper)
+                    .map(loanOfferMapper::toLoanOfferShortDto)
                     .toList();
         } else {
             loanOffersResponse = new ArrayList<>();
@@ -161,7 +158,7 @@ public class BankServiceImpl implements BankService {
     @Override
     public List<BankResponseShortDTO> getAllBanks(PageRequest pageRequest) {
         return bankRepository.getAllBanks(pageRequest).stream()
-                .map(bankResponseShortDTOMapper)
+                .map(bankMapper::toBankShortDto)
                 .collect(Collectors.toList());
     }
 

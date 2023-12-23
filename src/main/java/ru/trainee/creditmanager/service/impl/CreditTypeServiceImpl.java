@@ -10,9 +10,7 @@ import ru.trainee.creditmanager.dto.creditType.CreditTypeResponseDetailDTO;
 import ru.trainee.creditmanager.dto.creditType.CreditTypeResponseShortDTO;
 import ru.trainee.creditmanager.dto.creditType.CreditTypeUpdateDTO;
 import ru.trainee.creditmanager.entity.CreditType;
-import ru.trainee.creditmanager.mapper.creditType.CreditTypeDTOToCreateEntityMapper;
-import ru.trainee.creditmanager.mapper.creditType.CreditTypeResponseDetailDTOMapper;
-import ru.trainee.creditmanager.mapper.creditType.CreditTypeResponseShortDTOMapper;
+import ru.trainee.creditmanager.mapper.creditType.CreditTypeMapper;
 import ru.trainee.creditmanager.repository.CreditTypeRepository;
 import ru.trainee.creditmanager.service.BankService;
 import ru.trainee.creditmanager.service.CreditTypeService;
@@ -27,9 +25,8 @@ import java.util.stream.Collectors;
 public class CreditTypeServiceImpl implements CreditTypeService {
 
     private final CreditTypeRepository creditTypeRepository;
-    private final CreditTypeResponseShortDTOMapper creditTypeResponseShortDTOMapper;
-    private final CreditTypeResponseDetailDTOMapper creditTypeResponseDetailDTOMapper;
-    private final CreditTypeDTOToCreateEntityMapper creditTypeDTOToCreateEntityMapper;
+
+    private final CreditTypeMapper creditTypeMapper;
 
     private final BankService bankService;
 
@@ -38,17 +35,17 @@ public class CreditTypeServiceImpl implements CreditTypeService {
     public CreditTypeResponseDetailDTO create(@NotNull CreditTypeCreateDTO dto) {
         Optional<CreditType> ctOptional = creditTypeRepository.findByName(dto.getName());
         if (ctOptional.isEmpty()) {
-            CreditType savedCreditType = creditTypeRepository.save(creditTypeDTOToCreateEntityMapper.apply(dto));
-            return creditTypeResponseDetailDTOMapper.apply(savedCreditType);
+            CreditType savedCreditType = creditTypeRepository.save(creditTypeMapper.toCreditTypeEntity(dto));
+            return creditTypeMapper.toCreditTypeDetailDto(savedCreditType);
         } else {
-            return creditTypeResponseDetailDTOMapper.apply(ctOptional.get());
+            return creditTypeMapper.toCreditTypeDetailDto(ctOptional.get());
         }
     }
 
     @Override
     public List<CreditTypeResponseShortDTO> readAll(PageRequest pageRequest) {
         return creditTypeRepository.findAll(pageRequest).stream()
-                .map(creditTypeResponseShortDTOMapper)
+                .map(creditTypeMapper::toCreditTypeShortDto)
                 .collect(Collectors.toList());
     }
 
@@ -58,7 +55,7 @@ public class CreditTypeServiceImpl implements CreditTypeService {
         if(creditTypeOptional.isPresent()) {
             CreditType creditType = creditTypeOptional.get();
 
-            return creditTypeResponseDetailDTOMapper.apply(creditType);
+            return creditTypeMapper.toCreditTypeDetailDto(creditType);
         } else {
             throw new EntityNotFoundException("CreditType not found. Check id.");
         }
@@ -94,7 +91,7 @@ public class CreditTypeServiceImpl implements CreditTypeService {
             }
 
 
-            return creditTypeResponseDetailDTOMapper.apply(creditTypeRepository.save(editingCreditType));
+            return creditTypeMapper.toCreditTypeDetailDto(creditTypeRepository.save(editingCreditType));
         } else {
             throw new EntityNotFoundException("Credit type " + creditType.getId() + " does not exist. Check id.");
         }
