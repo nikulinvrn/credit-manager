@@ -1,9 +1,12 @@
 package ru.trainee.creditmanager.mapper.customer;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.trainee.creditmanager.dto.customer.CustomerResponseDetailDTO;
 import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseShortDTO;
 import ru.trainee.creditmanager.entity.Customer;
+import ru.trainee.creditmanager.mapper.bank.BankResponseShortDTOMapper;
+import ru.trainee.creditmanager.mapper.creditType.CreditTypeResponseShortDTOMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +14,12 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @Service
 public class CustomerResponseDetailDTOMapper implements Function<Customer, CustomerResponseDetailDTO> {
 
-
+    private final BankResponseShortDTOMapper bankResponseShortDTOMapper;
+    private final CreditTypeResponseShortDTOMapper creditTypeResponseShortDTOMapper;
 
     @Override
     public CustomerResponseDetailDTO apply(Customer customer) {
@@ -25,10 +30,8 @@ public class CustomerResponseDetailDTOMapper implements Function<Customer, Custo
             listOffers = customer.getLoanOffers().stream()
                     .map(loanOffer -> new LoanOfferResponseShortDTO(
                             loanOffer.getId(),
-//                            loanOffer.getBank().getName(),
-                            null,
-//                            loanOffer.getCreditType().getName(),
-                            null,
+                            bankResponseShortDTOMapper.apply(loanOffer.getBank()),
+                            creditTypeResponseShortDTOMapper.apply(loanOffer.getCreditType()),
                             loanOffer.getSumOfCredit(),
                             loanOffer.isActive(),
                             loanOffer.isAccepted()
