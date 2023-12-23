@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 public class LoanOfferResponseShortDTO {
 
     Long id;
+//    BankResponseShortDTO bank;
     BankResponseShortDTO bank;
     CreditTypeResponseShortDTO creditType;
     BigDecimal sumOfCredit;

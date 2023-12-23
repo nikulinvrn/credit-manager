@@ -51,5 +51,4 @@ public class LoanOfferControllerV1 {
     public void deleteBankById(@PathVariable Long id){
         loanOfferService.deleteById(id);
     }
-
 }
