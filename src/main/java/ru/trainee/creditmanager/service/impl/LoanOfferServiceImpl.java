@@ -8,7 +8,6 @@ import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseDetailDTO;
 import ru.trainee.creditmanager.entity.CreditType;
 import ru.trainee.creditmanager.entity.LoanOffer;
 import ru.trainee.creditmanager.entity.Payment;
-import ru.trainee.creditmanager.exception.BusinessException;
 import ru.trainee.creditmanager.exception.CreditLimitExceedException;
 import ru.trainee.creditmanager.mapper.loanOffer.LoanOfferMapper;
 import ru.trainee.creditmanager.repository.LoanOfferRepository;
@@ -30,9 +29,9 @@ public class LoanOfferServiceImpl implements LoanOfferService {
     private final CustomerService customerService;
     private final BankService bankService;
     private final CreditTypeService creditTypeService;
-    private final LoanOfferMapper loanOfferMapper;
     private final PaymentService paymentService;
 
+    private final LoanOfferMapper loanOfferMapper;
 
     @Override
     public LoanOfferResponseDetailDTO create(LoanOfferCreateDTO dto) {
@@ -101,7 +100,7 @@ public class LoanOfferServiceImpl implements LoanOfferService {
 
         Optional<LoanOffer> loanOfferOpt = loanOfferRepository.findById(loanOfferId);
         if (loanOfferOpt.isEmpty()) {
-            throw new BusinessException("The payment schedule generation error: the loan offer is NULL.");
+            throw new EntityNotFoundException("The payment schedule generation error: the loan offer is NULL.");
         }
         LoanOffer loanOffer = loanOfferOpt.get();
 
