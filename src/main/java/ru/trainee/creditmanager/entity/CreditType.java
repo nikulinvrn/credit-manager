@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -18,16 +19,19 @@ import java.util.List;
 public class CreditType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "credit_limit", nullable = false)
     private Integer creditLimit;
 
+    @Column(name = "interest_rate", nullable = false)
     private Double interestRate;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE) // TODO: Почему merge? Почему не All?
     @JoinColumn(name = "bank_id")
     private Bank bank;
 

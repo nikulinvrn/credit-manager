@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -55,7 +56,7 @@ public class LoanOfferServiceImpl implements LoanOfferService {
     }
 
     @Override
-    public LoanOfferResponseDetailDTO findById(Long id) {
+    public LoanOfferResponseDetailDTO findById(UUID id) {
         Optional<LoanOffer> loanOfferOptional = loanOfferRepository.findById(id);
 
         if(loanOfferOptional.isPresent()){
@@ -68,19 +69,19 @@ public class LoanOfferServiceImpl implements LoanOfferService {
     }
 
     @Override
-    public void accepting(Long id){
+    public void accepting(UUID id){
         loanOfferRepository.accepting(id);
     }
 
 
     @Override
-    public void deleteById(Long id){
+    public void deleteById(UUID id){
         loanOfferRepository.deleteById(id);
     }
 
 
     private List<Payment> paymentScheduleGenerate(
-            Long loanOfferId,
+            UUID loanOfferId,
             LoanOfferCreateDTO dto,
             CreditType creditType
     ){

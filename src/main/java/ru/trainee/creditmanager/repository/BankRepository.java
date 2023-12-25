@@ -11,31 +11,32 @@ import ru.trainee.creditmanager.entity.LoanOffer;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface BankRepository extends JpaRepository<Bank, Long> {
+public interface BankRepository extends JpaRepository<Bank, UUID> {
 
     @Query("select b from Bank b left join b.customers where b.id = :id")
-    Optional<Bank> getBankById(Long id);
+    Optional<Bank> getBankById(UUID id);
     Optional<Bank> findByName(String name);
 
     @Query("select c from Customer c join c.banks b where b.id = :id")
-    List<Customer> getBankCustomersById(Long id, PageRequest pageRequest);
+    List<Customer> getBankCustomersById(UUID id, PageRequest pageRequest);
 
     @Query("select count(c) from Customer c join c.banks b where b.id = :id")
-    Long countCustomersByBank(Long id);
+    Long countCustomersByBank(UUID id);
 
     @Query("select ct from CreditType ct join ct.bank b where b.id = :id")
-    List<CreditType> getBankCreditTypesById(Long id, PageRequest pageRequest);
+    List<CreditType> getBankCreditTypesById(UUID id, PageRequest pageRequest);
 
     @Query("select count(ct) from CreditType ct join ct.bank b where b.id = :id")
-    Long countCreditTypesByBank(Long id);
+    Long countCreditTypesByBank(UUID id);
 
     @Query("select lo from LoanOffer lo join lo.bank b where b.id = :id")
-    List<LoanOffer> getBankLoanOffersById(Long id, PageRequest pageRequest);
+    List<LoanOffer> getBankLoanOffersById(UUID id, PageRequest pageRequest);
 
     @Query("select count(lo) from LoanOffer lo join lo.bank b where b.id = :id")
-    Long countLoanOffersByBank(Long id);
+    Long countLoanOffersByBank(UUID id);
 
     @Query("select b from Bank b")
     List<Bank> getAllBanks(PageRequest pageRequest);

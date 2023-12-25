@@ -1,1 +1,0 @@
-drop table loan_offers;

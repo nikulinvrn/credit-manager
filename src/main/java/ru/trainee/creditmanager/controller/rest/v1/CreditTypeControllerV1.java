@@ -17,6 +17,7 @@ import ru.trainee.creditmanager.dto.creditType.CreditTypeUpdateDTO;
 import ru.trainee.creditmanager.service.CreditTypeService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -68,7 +69,7 @@ public class CreditTypeControllerV1 {
                               Карточка типа кредита содержит...
                               """
     )
-    public CreditTypeResponseDetailDTO findById(@PathVariable Long id) {
+    public CreditTypeResponseDetailDTO findById(@PathVariable UUID id) {
 
         return creditTypeService.findById(id);
     }
@@ -98,7 +99,7 @@ public class CreditTypeControllerV1 {
                               Карточка просто удаляется...
                               """
     )
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable UUID id) {
         creditTypeService.delete(id);
     }
 }

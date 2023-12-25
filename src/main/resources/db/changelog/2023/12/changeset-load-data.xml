@@ -6,13 +6,13 @@
 
     <changeSet id="7e0b386e-6f52" author="Nikulin">
         <loadData tableName="customers"
-                  file="db/changelog/v-1.0/060-customers-table-data.csv" />
+                  file="db/changelog/2023/12/init-data-set/customers-table-data.csv" />
 
         <loadData tableName="banks"
-                  file="db/changelog/v-1.0/060-banks-table-data.csv" />
+                  file="db/changelog/2023/12/init-data-set/banks-table-data.csv" />
 
         <loadData tableName="credit_types"
-                  file="db/changelog/v-1.0/060-credit-types-table-data.csv" />
+                  file="db/changelog/2023/12/init-data-set/credit-types-table-data.csv" />
     </changeSet>
 
 </databaseChangeLog>

@@ -23,10 +23,7 @@ import ru.trainee.creditmanager.mapper.loanOffer.LoanOfferMapper;
 import ru.trainee.creditmanager.repository.BankRepository;
 import ru.trainee.creditmanager.service.BankService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,7 +53,7 @@ public class BankServiceImpl implements BankService {
 
 
     @Override
-    public BankResponseDetailDTO getBankById(Long id) {
+    public BankResponseDetailDTO getBankById(UUID id) {
         Optional<Bank> bankOptional = bankRepository.getBankById(id);
         if(bankOptional.isPresent()){
             return bankMapper.toBankDetailDto(bankOptional.get());
@@ -78,7 +75,7 @@ public class BankServiceImpl implements BankService {
 
 
     @Override
-    public PageableListResponseDTO<CustomerResponseShortDTO> getBankCustomersById(Long id, PageRequest pageRequest) {
+    public PageableListResponseDTO<CustomerResponseShortDTO> getBankCustomersById(UUID id, PageRequest pageRequest) {
         if (bankRepository.getBankById(id).isEmpty()) {
             throw new EntityNotFoundException("Bank id:" + id + " does not exist");
         }
@@ -104,7 +101,7 @@ public class BankServiceImpl implements BankService {
 
 
     @Override
-    public PageableListResponseDTO<CreditTypeResponseShortDTO> getBankCreditTypesById(Long id, PageRequest pageRequest) {
+    public PageableListResponseDTO<CreditTypeResponseShortDTO> getBankCreditTypesById(UUID id, PageRequest pageRequest) {
         if (bankRepository.getBankById(id).isEmpty()) {
             throw new EntityNotFoundException("Bank id:" + id + " does not exist");
         }
@@ -130,7 +127,7 @@ public class BankServiceImpl implements BankService {
 
 
     @Override
-    public PageableListResponseDTO<LoanOfferResponseShortDTO> getBankLoanOffersById(Long id, PageRequest pageRequest) {
+    public PageableListResponseDTO<LoanOfferResponseShortDTO> getBankLoanOffersById(UUID id, PageRequest pageRequest) {
         if (bankRepository.getBankById(id).isEmpty()) {
             throw new EntityNotFoundException("Bank id:" + id + " does not exist");
         }
@@ -165,7 +162,7 @@ public class BankServiceImpl implements BankService {
 
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         bankRepository.deleteById(id);
     }
 

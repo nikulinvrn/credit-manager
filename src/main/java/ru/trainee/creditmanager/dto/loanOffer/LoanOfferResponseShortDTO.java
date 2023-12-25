@@ -5,6 +5,7 @@ import ru.trainee.creditmanager.dto.bank.BankResponseShortDTO;
 import ru.trainee.creditmanager.dto.creditType.CreditTypeResponseShortDTO;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @EqualsAndHashCode
 @Builder
@@ -14,7 +15,8 @@ import java.math.BigDecimal;
 @Setter
 public class LoanOfferResponseShortDTO {
 
-    Long id;
+    UUID id;
+
 //    BankResponseShortDTO bank;
     BankResponseShortDTO bank;
     CreditTypeResponseShortDTO creditType;

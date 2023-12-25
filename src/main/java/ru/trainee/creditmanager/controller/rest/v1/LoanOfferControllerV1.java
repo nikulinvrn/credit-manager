@@ -8,6 +8,8 @@ import ru.trainee.creditmanager.dto.loanOffer.LoanOfferCreateDTO;
 import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseDetailDTO;
 import ru.trainee.creditmanager.service.LoanOfferService;
 
+import java.util.UUID;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/offers")
@@ -38,7 +40,7 @@ public class LoanOfferControllerV1 {
                           Карточка кредитного предложения содержит ...
                           """
     )
-    public LoanOfferResponseDetailDTO findById(@PathVariable Long id) {
+    public LoanOfferResponseDetailDTO findById(@PathVariable UUID id) {
 
         return loanOfferService.findById(id);
     }
@@ -52,7 +54,7 @@ public class LoanOfferControllerV1 {
                     Принятие кредитного предложения. Присвоение статуса "accepted".
                     """
     )
-    public void accepting(@PathVariable Long id){
+    public void accepting(@PathVariable UUID id){
         loanOfferService.accepting(id);
     }
 
@@ -63,7 +65,7 @@ public class LoanOfferControllerV1 {
                     Удаление кредитного предложения и каскадное удаление всех дочерних сущностей.
                     """
     )
-    public void deleteBankById(@PathVariable Long id){
+    public void deleteBankById(@PathVariable UUID id){
         loanOfferService.deleteById(id);
     }
 }

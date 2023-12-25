@@ -24,31 +24,37 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "firstname")
     private String firstname;
 
+    @Column(name = "lastname")
     private String lastname;
 
+    @Column(name = "surname")
     private String surname;
 
+    @Column(name = "series", nullable = false)
     private Long series;
 
+    @Column(name = "number", nullable = false)
     private Long number;
 
+    @Column(name = "email")
     private String email;
 
-    private boolean isActive;
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive; // TODO: Заменить на поле enum со статусами, т.к. акт/неакт - мало!
 
     @ManyToMany(cascade = {
-            CascadeType.DETACH,
+            CascadeType.PERSIST,
             CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.PERSIST
+            CascadeType.REFRESH
     })
-    @JoinTable(
-            name = "customers_banks",
-            joinColumns = @JoinColumn(name = "customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "bank_id")
-    )
+//    @JoinTable(
+//            name = "customers_banks",
+//            joinColumns = @JoinColumn(name = "customer_id"),
+//            inverseJoinColumns = @JoinColumn(name = "bank_id")
+//    )
     private List<Bank> banks = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)

@@ -19,6 +19,7 @@ import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseShortDTO;
 import ru.trainee.creditmanager.service.BankService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -33,7 +34,7 @@ public class BankControllerV1 {
             summary = "Просмотр карточки банка",
             description = "Просмотр информации о банке: клиенты, типы кредитов, кредитные предложения."
     )
-    public BankResponseDetailDTO getBankById(@PathVariable Long id) {
+    public BankResponseDetailDTO getBankById(@PathVariable UUID id) {
         return bankService.getBankById(id);
     }
 
@@ -78,7 +79,7 @@ public class BankControllerV1 {
             description = "Содержит краткие карточки клиентов"
     )
     public PageableListResponseDTO<CustomerResponseShortDTO> getBankCustomersById(
-            @PathVariable Long id,
+            @PathVariable UUID id,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size
     ){
@@ -93,7 +94,7 @@ public class BankControllerV1 {
             description = "Содержит краткие карточки типов кредитов"
     )
     public PageableListResponseDTO<CreditTypeResponseShortDTO> getBankCreditTypesById(
-            @PathVariable Long id,
+            @PathVariable UUID id,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size
     ){
@@ -108,7 +109,7 @@ public class BankControllerV1 {
             description = "Содержит краткие карточки кредитных предложений"
     )
     public PageableListResponseDTO<LoanOfferResponseShortDTO> getBankLoanOffersById(
-            @PathVariable Long id,
+            @PathVariable UUID id,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size
     ){
@@ -125,7 +126,7 @@ public class BankControllerV1 {
                     типы кредитов, кредитные предложения.
                     """
     )
-    public void deleteBankById(@PathVariable Long id){
+    public void deleteBankById(@PathVariable UUID id){
         bankService.deleteById(id);
     }
 }

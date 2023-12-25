@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -17,14 +18,13 @@ import java.util.List;
 public class Bank {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(unique = true)
     private String name;
 
     @ManyToMany(cascade = {
-            CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.REFRESH,
             CascadeType.PERSIST
@@ -39,7 +39,8 @@ public class Bank {
     @OneToMany(mappedBy = "bank")
     private List<CreditType> creditTypes;
 
-    @OneToMany(mappedBy = "bank")
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "bank", orphanRemoval = true)
     private List<LoanOffer> loanOffers;
 
 }

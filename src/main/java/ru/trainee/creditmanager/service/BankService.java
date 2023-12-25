@@ -11,18 +11,19 @@ import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseShortDTO;
 import ru.trainee.creditmanager.entity.Bank;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface BankService {
 
     BankResponseDetailDTO create(BankCreateDTO dto);
-    BankResponseDetailDTO getBankById(Long id);
+    BankResponseDetailDTO getBankById(UUID id);
 
     Bank getBankByName(String name);
-    PageableListResponseDTO<CustomerResponseShortDTO> getBankCustomersById(Long id, PageRequest pageRequest);
-    PageableListResponseDTO<CreditTypeResponseShortDTO> getBankCreditTypesById(Long id, PageRequest pageRequest);
-    PageableListResponseDTO<LoanOfferResponseShortDTO> getBankLoanOffersById(Long id, PageRequest pageRequest);
+    PageableListResponseDTO<CustomerResponseShortDTO> getBankCustomersById(UUID id, PageRequest pageRequest);
+    PageableListResponseDTO<CreditTypeResponseShortDTO> getBankCreditTypesById(UUID id, PageRequest pageRequest);
+    PageableListResponseDTO<LoanOfferResponseShortDTO> getBankLoanOffersById(UUID id, PageRequest pageRequest);
     List<BankResponseShortDTO> getAllBanks(PageRequest pageRequest);
 
-    void deleteById(Long id);
+    void deleteById(UUID id);
 
 }

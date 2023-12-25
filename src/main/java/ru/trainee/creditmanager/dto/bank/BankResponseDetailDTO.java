@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
 
+import java.util.UUID;
+
 /**
  * DTO for {@link ru.trainee.creditmanager.entity.Bank}
  */
@@ -15,7 +17,7 @@ import lombok.*;
 @Setter
 @JsonPropertyOrder({"id", "name", "customers", "loanOffers"})
 public class BankResponseDetailDTO {
-    Long id;
+    UUID id;
     String name;
     @JsonProperty("customers")
     Integer customersCost;

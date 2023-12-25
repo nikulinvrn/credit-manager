@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.UUID;
+
 /**
  * DTO for {@link ru.trainee.creditmanager.entity.CreditType}
  */
@@ -14,7 +16,7 @@ import lombok.*;
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CreditTypeResponseDetailDTO {
-    Long id;
+    UUID id;
     String name;
     @JsonProperty("credit_limit")
     Integer creditLimit;

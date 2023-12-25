@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -18,19 +19,25 @@ import java.time.LocalDate;
 public class Payment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    private LocalDate date;
+    @Column(name = "payment_date")
+    private LocalDate paymentDate;
 
+    @Column(name = "principal_of_payment")
     private BigDecimal principalOfPayment;
 
+    @Column(name = "interest_of_payment")
     private BigDecimal interestOfPayment;
 
+    @Column(name = "sum_of_payment")
     private BigDecimal sumOfPayment;
 
+    @Column(name = "balance_of_debt")
     private BigDecimal balanceOfDebt;
 
+    @Column(name = "is_payed")
     private boolean isPayed;
 
     @ManyToOne

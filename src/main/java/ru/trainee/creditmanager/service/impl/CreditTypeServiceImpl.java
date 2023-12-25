@@ -18,6 +18,7 @@ import ru.trainee.creditmanager.service.CreditTypeService;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,7 +51,7 @@ public class CreditTypeServiceImpl implements CreditTypeService {
     }
 
     @Override
-    public CreditTypeResponseDetailDTO findById(Long id) {
+    public CreditTypeResponseDetailDTO findById(UUID id) {
         Optional<CreditType> creditTypeOptional = creditTypeRepository.findById(id);
         if(creditTypeOptional.isPresent()) {
             CreditType creditType = creditTypeOptional.get();
@@ -98,7 +99,7 @@ public class CreditTypeServiceImpl implements CreditTypeService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         creditTypeRepository.deleteById(id);
     }
 }

@@ -8,4 +8,13 @@
       </database-info>
     </database-infos>
   </component>
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit name="Default" defaultIncludeChangeLogFile="src/main/resources/db/changelog/2023/12/db.changelog-master.xml">
+        <packages>
+          <package value="ru.trainee.creditmanager" />
+        </packages>
+      </persistence-unit>
+    </persistence-units>
+  </component>
 </project>

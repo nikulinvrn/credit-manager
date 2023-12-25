@@ -3,9 +3,11 @@ package ru.trainee.creditmanager.dto.creditType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 
+import java.util.UUID;
+
 @Value
 public class CreditTypeUpdateDTO {
-    Long id;
+    UUID id;
     String name;
     @JsonProperty("credit_limit")
     Integer creditLimit;

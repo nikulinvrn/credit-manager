@@ -63,7 +63,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setBalanceOfDebt(balanceOfDebt.subtract(payment.getSumOfPayment()
                         .subtract(payment.getInterestOfPayment()))
                 .setScale(2, RoundingMode.HALF_EVEN));
-        payment.setDate(date);
+        payment.setPaymentDate(date);
 
         return payment;
     }

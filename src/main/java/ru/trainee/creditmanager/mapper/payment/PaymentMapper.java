@@ -10,7 +10,7 @@ public class PaymentMapper {
 
     public PaymentResponseShortDTO toPaymentShortDto(Payment payment) {
         return new PaymentResponseShortDTO(
-                payment.getDate(),
+                payment.getPaymentDate(),
                 payment.getPrincipalOfPayment(),
                 payment.getInterestOfPayment(),
                 payment.getSumOfPayment(),

@@ -3,6 +3,8 @@ package ru.trainee.creditmanager.dto.creditType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
+import java.util.UUID;
+
 /**
  * DTO for {@link ru.trainee.creditmanager.entity.CreditType}
  */
@@ -14,7 +16,7 @@ import lombok.*;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CreditTypeResponseShortDTO {
-    Long id;
+    UUID id;
     String name;
     String bank;
     Double interestRate;

@@ -8,17 +8,18 @@ import ru.trainee.creditmanager.dto.creditType.CreditTypeUpdateDTO;
 import ru.trainee.creditmanager.entity.CreditType;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface CreditTypeService {
     CreditTypeResponseDetailDTO create(CreditTypeCreateDTO dto);
 
     List<CreditTypeResponseShortDTO> readAll(PageRequest pageRequest);
 
-    CreditTypeResponseDetailDTO findById(Long id);
+    CreditTypeResponseDetailDTO findById(UUID id);
 
     CreditType findByName(String name);
 
     CreditTypeResponseDetailDTO update(CreditTypeUpdateDTO creditType);
 
-    void delete(Long id);
+    void delete(UUID id);
 }
