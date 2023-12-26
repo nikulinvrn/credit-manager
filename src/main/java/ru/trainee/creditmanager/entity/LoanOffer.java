@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "loan_offers")
-public class LoanOffer {
+public class LoanOffer  extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

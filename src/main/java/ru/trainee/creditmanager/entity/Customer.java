@@ -18,7 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Table(name = "customers")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Customer {
+public class Customer  extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

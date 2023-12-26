@@ -1,29 +1,18 @@
 package ru.trainee.creditmanager.service;
 
-import org.springframework.data.domain.PageRequest;
-import ru.trainee.creditmanager.dto.PageableListResponseDTO;
-import ru.trainee.creditmanager.dto.bank.BankCreateDTO;
-import ru.trainee.creditmanager.dto.bank.BankResponseDetailDTO;
-import ru.trainee.creditmanager.dto.bank.BankResponseShortDTO;
-import ru.trainee.creditmanager.dto.creditType.CreditTypeResponseShortDTO;
-import ru.trainee.creditmanager.dto.customer.CustomerResponseShortDTO;
-import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseShortDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.trainee.creditmanager.entity.Bank;
+import ru.trainee.creditmanager.entity.CreditType;
+import ru.trainee.creditmanager.entity.Customer;
+import ru.trainee.creditmanager.entity.LoanOffer;
 
-import java.util.List;
 import java.util.UUID;
 
-public interface BankService {
-
-    BankResponseDetailDTO create(BankCreateDTO dto);
-    BankResponseDetailDTO getBankById(UUID id);
+public interface BankService extends CommonService<Bank> {
 
     Bank getBankByName(String name);
-    PageableListResponseDTO<CustomerResponseShortDTO> getBankCustomersById(UUID id, PageRequest pageRequest);
-    PageableListResponseDTO<CreditTypeResponseShortDTO> getBankCreditTypesById(UUID id, PageRequest pageRequest);
-    PageableListResponseDTO<LoanOfferResponseShortDTO> getBankLoanOffersById(UUID id, PageRequest pageRequest);
-    List<BankResponseShortDTO> getAllBanks(PageRequest pageRequest);
-
-    void deleteById(UUID id);
-
+    Page<Customer> getBankCustomersById(UUID id, Pageable p);
+    Page<CreditType> getBankCreditTypesById(UUID id, Pageable p);
+    Page<LoanOffer> getBankLoanOffersById(UUID id, Pageable p);
 }

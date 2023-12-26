@@ -10,7 +10,6 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +17,11 @@ import ru.trainee.creditmanager.dto.PageableListResponseDTO;
 import ru.trainee.creditmanager.dto.creditType.CreditTypeCreateDTO;
 import ru.trainee.creditmanager.dto.creditType.CreditTypeResponseDetailDTO;
 import ru.trainee.creditmanager.dto.creditType.CreditTypeResponseShortDTO;
-import ru.trainee.creditmanager.dto.creditType.CreditTypeUpdateDTO;
 import ru.trainee.creditmanager.entity.CreditType;
 import ru.trainee.creditmanager.mapper.creditType.CreditTypeMapper;
 import ru.trainee.creditmanager.service.CreditTypeService;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -51,8 +48,8 @@ public class CreditTypeControllerV1 {
             @Schema(implementation = CreditTypeResponseDetailDTO.class))})
     public CreditTypeResponseDetailDTO create(@RequestBody CreditTypeCreateDTO dto) {
 
-        Optional<CreditType> creditTypeOptional = creditTypeService.findByName(dto.getName());
-        if(creditTypeOptional.isEmpty()){
+        CreditType creditType = creditTypeService.findByName(dto.getName());
+        if(Objects.isNull(creditType)){
             return creditTypeMapper.toCreditTypeDetailDto(
                     creditTypeService.create(
                             creditTypeMapper.toCreditTypeEntity(dto))
@@ -95,9 +92,9 @@ public class CreditTypeControllerV1 {
                               """
     )
     public CreditTypeResponseDetailDTO findById(@PathVariable UUID id) {
-        Optional<CreditType> creditTypeOptional = creditTypeService.findById(id);
-        if(creditTypeOptional.isPresent()){
-            return creditTypeMapper.toCreditTypeDetailDto(creditTypeOptional.get());
+        CreditType creditType = creditTypeService.findById(id);
+        if(Objects.nonNull(creditType)){
+            return creditTypeMapper.toCreditTypeDetailDto(creditType);
         } else {
             throw new EntityNotFoundException("Credit type " + id + " not found! Check id.");
         }
@@ -132,7 +129,7 @@ public class CreditTypeControllerV1 {
                               """
     )
     public void delete(@PathVariable UUID id) {
-        if(creditTypeService.findById(id).isEmpty()){
+        if(Objects.isNull(creditTypeService.findById(id))){
             throw new EntityNotFoundException("Credit type " + id + " not found! Check id.");
         }
         creditTypeService.delete(id);

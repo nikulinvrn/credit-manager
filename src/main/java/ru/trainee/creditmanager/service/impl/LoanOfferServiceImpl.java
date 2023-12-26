@@ -43,9 +43,7 @@ public class LoanOfferServiceImpl implements LoanOfferService {
                 dto.passportNumber()
         ));
         offer.setBank(bankService.getBankByName(dto.bankName()));
-        //TODO: сделать отдельный метод в CreditTypeService, который будет
-        //      отдавать не опшнл, а конкретно сущность CreditType
-        offer.setCreditType(creditTypeService.findByName(dto.creditTypeName()).get());
+        offer.setCreditType(creditTypeService.findByName(dto.creditTypeName()));
         offer.setActive(true); // по умолчанию активно
         offer.setAccepted(false); // по умолчанию не принято
         offer = loanOfferRepository.save(offer); // сохраняем, чтобы присвоить ID и вычитываем

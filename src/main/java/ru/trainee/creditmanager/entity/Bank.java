@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "banks")
-public class Bank {
+public class Bank extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
