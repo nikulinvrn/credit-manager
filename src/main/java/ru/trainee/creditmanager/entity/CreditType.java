@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "credit_types")
-public class CreditType {
+public class CreditType  extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

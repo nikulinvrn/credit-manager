@@ -1,49 +1,27 @@
 package ru.trainee.creditmanager.service.impl;
 
-import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.trainee.creditmanager.entity.CreditType;
 import ru.trainee.creditmanager.repository.CreditTypeRepository;
+import ru.trainee.creditmanager.service.BaseService;
 import ru.trainee.creditmanager.service.CreditTypeService;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Service
-@AllArgsConstructor
-public class CreditTypeServiceImpl implements CreditTypeService {
+public class CreditTypeServiceImpl
+        extends BaseService<CreditType, CreditTypeRepository>
+        implements CreditTypeService {
 
-    private final CreditTypeRepository creditTypeRepository;
-
-    @Override
-    public CreditType create(CreditType creditType) {
-        return creditTypeRepository.save(creditType);
+    public CreditTypeServiceImpl(CreditTypeRepository repository) {
+        super(repository);
     }
 
-    @Override
-    public Page<CreditType> readAll(Pageable pageable) {
-        return creditTypeRepository.findAll(pageable);
+
+    public CreditType findByName(String name) {
+        return super.repository.findByName(name).orElseThrow(
+                () -> new EntityNotFoundException("Credit type " + name + " not found")
+        );
     }
 
-    @Override
-    public Optional<CreditType> findById(UUID id) {
-        return creditTypeRepository.findById(id);
-    }
-
-    @Override
-    public Optional<CreditType> findByName(String name) {
-        return creditTypeRepository.findByName(name);
-    }
-
-    @Override
-    public CreditType update(CreditType creditType) {
-        return creditTypeRepository.save(creditType);
-    }
-
-    @Override
-    public void delete(UUID id) {
-        creditTypeRepository.deleteById(id);
-    }
 }
+

@@ -1,6 +1,5 @@
 package ru.trainee.creditmanager.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,7 +9,7 @@ import ru.trainee.creditmanager.entity.LoanOffer;
 import java.util.UUID;
 
 @Repository
-public interface LoanOfferRepository extends JpaRepository<LoanOffer, UUID> {
+public interface LoanOfferRepository extends CommonRepository<LoanOffer> {
 
     @Transactional
     @Modifying
