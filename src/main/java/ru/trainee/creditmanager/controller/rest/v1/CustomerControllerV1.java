@@ -5,17 +5,22 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.trainee.creditmanager.dto.PageableListResponseDTO;
 import ru.trainee.creditmanager.dto.customer.CustomerCreateDTO;
 import ru.trainee.creditmanager.dto.customer.CustomerResponseDetailDTO;
 import ru.trainee.creditmanager.dto.customer.CustomerResponseShortDTO;
-import ru.trainee.creditmanager.dto.customer.CustomerUpdateDTO;
+import ru.trainee.creditmanager.entity.Customer;
+import ru.trainee.creditmanager.mapper.customer.CustomerMapper;
 import ru.trainee.creditmanager.service.CustomerService;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -25,6 +30,7 @@ import java.util.UUID;
 public class CustomerControllerV1 {
 
     private final CustomerService customerService;
+    private final CustomerMapper customerMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -41,7 +47,16 @@ public class CustomerControllerV1 {
             {@Content(mediaType = "application/json", schema =
             @Schema(implementation = CustomerResponseDetailDTO.class))})
     public CustomerResponseDetailDTO create(@RequestBody CustomerCreateDTO dto) {
-        return customerService.create(dto);
+
+        Customer customer = customerService.findBySeriesAndNumber(dto.series(), dto.number());
+        if(Objects.isNull(customer)){
+            return customerMapper.toCustomerDetailDto(
+                    customerService.create(
+                            customerMapper.toCustomerEntity(dto))
+            );
+        } else {
+            throw new EntityExistsException("Customer already exixst.");
+        }
     }
 
 
@@ -54,11 +69,18 @@ public class CustomerControllerV1 {
                           пользуется клиент, и персональных кредитных предложений.
                           """
     )
-    public List<CustomerResponseShortDTO> getAllCustomers(
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "10") int size
-    ) {
-        return customerService.getAllCustomers(PageRequest.of(page, size));
+    public PageableListResponseDTO<CustomerResponseShortDTO> readAll(Pageable p){
+
+        Page<Customer> page = customerService.readAll(p);
+
+        return new PageableListResponseDTO<>(
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages(),
+                page.getContent().stream()
+                        .map(customerMapper::toCustomerShortDto)
+                        .toList());
     }
 
 
@@ -68,12 +90,20 @@ public class CustomerControllerV1 {
             summary = "(Административное) Получение списка неактивных клиентов",
             description = "Может быть необходимо для дальнейшей активации карточки по id."
     )
-    public List<CustomerResponseShortDTO> getAllInactiveCustomers(
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "10") int size
-    ) {
-        return customerService.getAllInactiveCustomers(PageRequest.of(page, size));
+    public PageableListResponseDTO<CustomerResponseShortDTO> getAllInactiveCustomers(Pageable p){
+
+        Page<Customer> page = customerService.getAllInactiveCustomers(p);
+
+        return new PageableListResponseDTO<>(
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages(),
+                page.getContent().stream()
+                        .map(customerMapper::toCustomerShortDto)
+                        .toList());
     }
+
 
 
     @GetMapping("/{id}")
@@ -85,8 +115,12 @@ public class CustomerControllerV1 {
                           """
     )
     public CustomerResponseDetailDTO getCustomerById(@PathVariable UUID id) {
-
-        return customerService.getCustomerById(id);
+        Customer customer = customerService.findById(id);
+        if(Objects.nonNull(customer)){
+            return customerMapper.toCustomerDetailDto(customer);
+        } else {
+            throw new EntityNotFoundException("Custoemer " + id + " not found! Check id.");
+        }
     }
 
 
@@ -101,9 +135,11 @@ public class CustomerControllerV1 {
                           """
     )
     @ResponseStatus(HttpStatus.OK)
-    public CustomerResponseDetailDTO update(@RequestBody CustomerUpdateDTO dto) {
-
-        return customerService.update(dto);
+    public CustomerResponseDetailDTO update(@RequestBody CustomerCreateDTO dto) {
+        return customerMapper.toCustomerDetailDto(
+                customerService.update(
+                        customerMapper.toCustomerEntity(dto))
+        );
     }
 
 
@@ -119,7 +155,7 @@ public class CustomerControllerV1 {
     public CustomerResponseDetailDTO deactivate(@PathVariable UUID id) {
 
         customerService.deactivate(id);
-        return customerService.getCustomerById(id);
+        return customerMapper.toCustomerDetailDto(customerService.findById(id));
     }
 
 
@@ -131,7 +167,7 @@ public class CustomerControllerV1 {
     )
     public CustomerResponseDetailDTO activate(@PathVariable UUID id) {
         customerService.activate(id);
-        return customerService.getCustomerById(id);
+        return customerMapper.toCustomerDetailDto(customerService.findById(id));
     }
 
 }

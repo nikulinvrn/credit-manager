@@ -1,5 +1,7 @@
 package ru.trainee.creditmanager.dto.customer;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.UUID;
 
 public record CustomerUpdateDTO(UUID id,
@@ -8,6 +10,7 @@ public record CustomerUpdateDTO(UUID id,
                                 String surname,
                                 Long series,
                                 Long number,
-                                String email) {
-
+                                String email,
+                                @JsonProperty("active")
+                                Boolean isActive) {
 }

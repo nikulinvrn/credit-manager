@@ -1,24 +1,16 @@
 package ru.trainee.creditmanager.service;
 
-import org.springframework.data.domain.PageRequest;
-import ru.trainee.creditmanager.dto.customer.CustomerCreateDTO;
-import ru.trainee.creditmanager.dto.customer.CustomerResponseDetailDTO;
-import ru.trainee.creditmanager.dto.customer.CustomerResponseShortDTO;
-import ru.trainee.creditmanager.dto.customer.CustomerUpdateDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.trainee.creditmanager.entity.Customer;
 
-import java.util.List;
 import java.util.UUID;
 
-public interface CustomerService {
+public interface CustomerService extends CommonService<Customer>{
 
-    CustomerResponseDetailDTO create(CustomerCreateDTO dto);
-    List<CustomerResponseShortDTO> getAllCustomers(PageRequest pageRequest);
-    List<CustomerResponseShortDTO> getAllInactiveCustomers(PageRequest pageRequest);
-    CustomerResponseDetailDTO getCustomerById(UUID id);
+    Page<Customer> getAllInactiveCustomers(Pageable p);
 
     Customer findBySeriesAndNumber(Long series, Long number);
-    CustomerResponseDetailDTO update(CustomerUpdateDTO customer);
     void deactivate(UUID id);
     void activate(UUID id);
 }

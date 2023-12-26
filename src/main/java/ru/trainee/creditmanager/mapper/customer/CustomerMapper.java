@@ -9,6 +9,8 @@ import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseShortDTO;
 import ru.trainee.creditmanager.entity.Customer;
 import ru.trainee.creditmanager.mapper.bank.BankMapper;
 import ru.trainee.creditmanager.mapper.creditType.CreditTypeMapper;
+import ru.trainee.creditmanager.service.BankService;
+import ru.trainee.creditmanager.service.CustomerService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,8 @@ public class CustomerMapper {
 
     private final BankMapper bankMapper;
     private final CreditTypeMapper creditTypeMapper;
+
+    private final CustomerService customerService;
 
     public CustomerResponseShortDTO toCustomerShortDto(Customer customer) {
         return new CustomerResponseShortDTO(
@@ -66,17 +70,33 @@ public class CustomerMapper {
     }
 
     public Customer toCustomerEntity(CustomerCreateDTO dto) {
-        return new Customer(
-                null,
-                dto.firstname(),
-                dto.lastname(),
-                dto.surname(),
+
+        Customer customer = customerService.findBySeriesAndNumber(
                 dto.series(),
-                dto.number(),
-                dto.email(),
-                true,
-                null,
-                null
+                dto.number()
         );
+
+        if(Objects.nonNull(customer)){
+            customer.setFirstname(dto.firstname());
+            customer.setLastname(dto.lastname());
+            customer.setSurname(dto.surname());
+            customer.setEmail(dto.email());
+            customer.setActive(dto.isActive());
+
+            return customer;
+        } else {
+            return new Customer(
+                    null,
+                    dto.firstname(),
+                    dto.lastname(),
+                    dto.surname(),
+                    dto.series(),
+                    dto.number(),
+                    dto.email(),
+                    dto.isActive(),
+                    null,
+                    null);
+        }
     }
 }
+
