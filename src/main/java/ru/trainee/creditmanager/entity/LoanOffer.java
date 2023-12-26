@@ -52,6 +52,7 @@ public class LoanOffer {
     @Column(name = "is_active")
     private boolean isActive;
 
+    @Column(name = "is_accepted")
     private boolean isAccepted;
 
 }

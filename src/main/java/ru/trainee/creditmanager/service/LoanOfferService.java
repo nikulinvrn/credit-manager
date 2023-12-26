@@ -16,8 +16,4 @@ public interface LoanOfferService {
 
     void accepting(UUID id);
 
-//    List<LoanOffer> findAllByCustomerId(Long customerId);
-//    LoanOffer activating(Long id, boolean status);
-//    LoanOffer deactivating(Long id);
-
 }

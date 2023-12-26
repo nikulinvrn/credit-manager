@@ -72,7 +72,7 @@ public class BankServiceImpl implements BankService {
         }
     }
 
-
+// TODO: Исправить пагинацию во всем сервисе!!!
 
     @Override
     public PageableListResponseDTO<CustomerResponseShortDTO> getBankCustomersById(UUID id, PageRequest pageRequest) {
@@ -94,6 +94,7 @@ public class BankServiceImpl implements BankService {
                 pageRequest.getPageNumber(),
                 pageRequest.getPageSize(),
                 bankRepository.countCustomersByBank(id),
+                0,
                 customersResponse
         );
     }
@@ -120,6 +121,7 @@ public class BankServiceImpl implements BankService {
                 pageRequest.getPageNumber(),
                 pageRequest.getPageSize(),
                 bankRepository.countCreditTypesByBank(id),
+                0,
                 creditTypeResponse
         );
     }
@@ -146,6 +148,7 @@ public class BankServiceImpl implements BankService {
                 pageRequest.getPageNumber(),
                 pageRequest.getPageSize(),
                 bankRepository.countLoanOffersByBank(id),
+                0,
                 loanOffersResponse
         );
     }

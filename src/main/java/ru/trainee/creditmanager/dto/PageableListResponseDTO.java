@@ -22,7 +22,9 @@ public class PageableListResponseDTO<T> {
     @JsonProperty("page_size")
     Integer size;
     @JsonProperty("total_items")
-    Long total;
+    Long totalItems;
+    @JsonProperty("total_pages")
+    Integer totalPages;
     @JsonProperty("content")
     List<T> items;
 }

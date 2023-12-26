@@ -36,11 +36,10 @@ public class Bank {
     )
     private List<Customer> customers;
 
-    @OneToMany(mappedBy = "bank")
+    @OneToMany(mappedBy = "bank", orphanRemoval = true)
     private List<CreditType> creditTypes;
 
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "bank", orphanRemoval = true)
     private List<LoanOffer> loanOffers;
-
 }

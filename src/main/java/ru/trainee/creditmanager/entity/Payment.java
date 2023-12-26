@@ -40,6 +40,6 @@ public class Payment {
     @Column(name = "is_payed")
     private boolean isPayed;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private LoanOffer loanOffer;
 }

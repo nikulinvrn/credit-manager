@@ -39,11 +39,13 @@ public class LoanOfferServiceImpl implements LoanOfferService {
 
         LoanOffer offer = new LoanOffer();
         offer.setCustomer(customerService.findBySeriesAndNumber(
-                dto.getPassportSeries(),
-                dto.getPassportNumber()
+                dto.passportSeries(),
+                dto.passportNumber()
         ));
-        offer.setBank(bankService.getBankByName(dto.getBankName()));
-        offer.setCreditType(creditTypeService.findByName(dto.getCreditTypeName()));
+        offer.setBank(bankService.getBankByName(dto.bankName()));
+        //TODO: сделать отдельный метод в CreditTypeService, который будет
+        //      отдавать не опшнл, а конкретно сущность CreditType
+        offer.setCreditType(creditTypeService.findByName(dto.creditTypeName()).get());
         offer.setActive(true); // по умолчанию активно
         offer.setAccepted(false); // по умолчанию не принято
         offer = loanOfferRepository.save(offer); // сохраняем, чтобы присвоить ID и вычитываем
@@ -86,11 +88,11 @@ public class LoanOfferServiceImpl implements LoanOfferService {
             CreditType creditType
     ){
 
-        if (dto.getAmountRequested() > creditType.getCreditLimit()){
+        if (dto.amountRequested() > creditType.getCreditLimit()){
             throw new CreditLimitExceedException(String.format(
                     "The credit limit is exceeded. Max value %d, but requested %d.",
                     creditType.getCreditLimit(),
-                    dto.getAmountRequested()));
+                    dto.amountRequested()));
         }
 
         BigDecimal interestRatePerMonth = new BigDecimal(
@@ -108,21 +110,21 @@ public class LoanOfferServiceImpl implements LoanOfferService {
         BigDecimal sumInterestOfCredit = new BigDecimal("0");
 
         BigDecimal sumOfPayment = paymentService.calculationOfAnnuityMonthlyPayment(
-                BigDecimal.valueOf(dto.getAmountRequested()),
+                BigDecimal.valueOf(dto.amountRequested()),
                 interestRatePerMonth,
-                dto.getLoanTerm());
+                dto.loanTerm());
 
         LocalDate date = LocalDate.now();
-        BigDecimal balanceOfDebt = BigDecimal.valueOf(dto.getAmountRequested());
+        BigDecimal balanceOfDebt = BigDecimal.valueOf(dto.amountRequested());
 
-        for(int i = 0; i < dto.getLoanTerm(); i++){
+        for(int i = 0; i < dto.loanTerm(); i++){
             date = date.plusMonths(+ 1);
 
             Payment payment = paymentService.calculatePayment(
                     loanOffer,
                     interestRatePerMonth,
                     sumOfPayment,
-                    dto.getLoanTerm(),
+                    dto.loanTerm(),
                     balanceOfDebt,
                     date
             );
@@ -130,7 +132,7 @@ public class LoanOfferServiceImpl implements LoanOfferService {
             balanceOfDebt = payment.getBalanceOfDebt();
 
             // The remaining amount of the debt that appeared during rounding is adjusted in the last payment
-            if (i == dto.getLoanTerm() - 1){
+            if (i == dto.loanTerm() - 1){
                 payment.setSumOfPayment(payment.getSumOfPayment().add(balanceOfDebt)
                         .setScale(2, RoundingMode.HALF_EVEN));
                 payment.setBalanceOfDebt(new BigDecimal("0"));
@@ -141,9 +143,9 @@ public class LoanOfferServiceImpl implements LoanOfferService {
             sumInterestOfCredit = sumInterestOfCredit.add(payment.getInterestOfPayment());
         }
 
-        loanOffer.setSumOfCredit(sumOfPayment.multiply(BigDecimal.valueOf(dto.getLoanTerm()))
+        loanOffer.setSumOfCredit(sumOfPayment.multiply(BigDecimal.valueOf(dto.loanTerm()))
                 .setScale(2, RoundingMode.HALF_EVEN));
-        loanOffer.setPrincipalOfCredit(BigDecimal.valueOf(dto.getAmountRequested())
+        loanOffer.setPrincipalOfCredit(BigDecimal.valueOf(dto.amountRequested())
                 .setScale(2, RoundingMode.HALF_EVEN));
         loanOffer.setSumOfInterest(sumInterestOfCredit
                 .setScale(2, RoundingMode.HALF_EVEN));

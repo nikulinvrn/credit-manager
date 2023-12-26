@@ -30,9 +30,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponseDetailDTO create(@NotNull CustomerCreateDTO dto){
 
-        if(customerRepository.existsBySeriesAndNumber(dto.getSeries(), dto.getNumber())){
+        if(customerRepository.existsBySeriesAndNumber(dto.series(), dto.number())){
             return customerMapper.toCustomerDetailDto(customerRepository
-                    .findBySeriesAndNumber(dto.getSeries(), dto.getNumber()));
+                    .findBySeriesAndNumber(dto.series(), dto.number()));
         } else {
             Customer createdCustomer = customerRepository
                     .save(customerMapper.toCustomerEntity(dto));
@@ -74,20 +74,20 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponseDetailDTO update(CustomerUpdateDTO customer){
-        Optional<Customer> customerOptional = customerRepository.getCustomerById(customer.getId());
+        Optional<Customer> customerOptional = customerRepository.getCustomerById(customer.id());
         if (customerOptional.isPresent()){
             Customer editingCustomer = customerOptional.get();
 
-            if (Objects.nonNull(customer.getFirstname())) editingCustomer.setFirstname(customer.getFirstname());
-            if (Objects.nonNull(customer.getLastname()))  editingCustomer.setLastname(customer.getLastname());
-            if (Objects.nonNull(customer.getSurname()))   editingCustomer.setSurname(customer.getSurname());
-            if (Objects.nonNull(customer.getSeries()))    editingCustomer.setSeries(customer.getSeries());
-            if (Objects.nonNull(customer.getNumber()))    editingCustomer.setNumber(customer.getNumber());
-            if (Objects.nonNull(customer.getEmail()))     editingCustomer.setEmail(customer.getEmail());
+            if (Objects.nonNull(customer.firstname())) editingCustomer.setFirstname(customer.firstname());
+            if (Objects.nonNull(customer.lastname()))  editingCustomer.setLastname(customer.lastname());
+            if (Objects.nonNull(customer.surname()))   editingCustomer.setSurname(customer.surname());
+            if (Objects.nonNull(customer.series()))    editingCustomer.setSeries(customer.series());
+            if (Objects.nonNull(customer.number()))    editingCustomer.setNumber(customer.number());
+            if (Objects.nonNull(customer.email()))     editingCustomer.setEmail(customer.email());
 
             return customerMapper.toCustomerDetailDto(customerRepository.save(editingCustomer));
         } else {
-            throw new EntityNotFoundException("Customer " + customer.getId() + " does not exist. Check id.");
+            throw new EntityNotFoundException("Customer " + customer.id() + " does not exist. Check id.");
         }
     }
 

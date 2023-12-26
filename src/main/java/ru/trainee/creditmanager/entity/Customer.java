@@ -43,18 +43,13 @@ public class Customer {
     private String email;
 
     @Column(name = "is_active", nullable = false)
-    private boolean isActive; // TODO: Заменить на поле enum со статусами, т.к. акт/неакт - мало!
+    private boolean isActive;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH
     })
-//    @JoinTable(
-//            name = "customers_banks",
-//            joinColumns = @JoinColumn(name = "customer_id"),
-//            inverseJoinColumns = @JoinColumn(name = "bank_id")
-//    )
     private List<Bank> banks = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)

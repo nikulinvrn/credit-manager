@@ -31,7 +31,8 @@ public class CreditType {
     @Column(name = "interest_rate", nullable = false)
     private Double interestRate;
 
-    @ManyToOne(cascade = CascadeType.MERGE) // TODO: Почему merge? Почему не All?
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "bank_id")
     private Bank bank;
 

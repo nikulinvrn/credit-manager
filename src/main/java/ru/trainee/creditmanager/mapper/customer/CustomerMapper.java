@@ -68,12 +68,12 @@ public class CustomerMapper {
     public Customer toCustomerEntity(CustomerCreateDTO dto) {
         return new Customer(
                 null,
-                dto.getFirstname(),
-                dto.getLastname(),
-                dto.getSurname(),
-                dto.getSeries(),
-                dto.getNumber(),
-                dto.getEmail(),
+                dto.firstname(),
+                dto.lastname(),
+                dto.surname(),
+                dto.series(),
+                dto.number(),
+                dto.email(),
                 true,
                 null,
                 null

@@ -8,6 +8,7 @@ class CreditManagerApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println("Test will be here. Later...");
     }
 
 }
