@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
 
-public record CreditTypeUpdateDTO(UUID id, // TODO: переделать метод UPDATE для всех сущностей!
+public record CreditTypeUpdateDTO(UUID id,
                                   String name,
                                   @JsonProperty("credit_limit")
                                   Integer creditLimit,
                                   @JsonProperty("interest_rate")
                                   Double interestRate,
-                                  @JsonProperty("bank_name")
-                                  String bankName) {
+                                  @JsonProperty("bank_id")
+                                  UUID bankId) {
 }

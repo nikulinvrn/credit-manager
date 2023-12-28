@@ -172,6 +172,8 @@ public class BankControllerV1 {
 
 
 
+    // TODO: а где Update для банка???
+
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Удаление банка",

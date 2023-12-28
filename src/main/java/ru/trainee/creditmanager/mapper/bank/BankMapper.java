@@ -29,7 +29,7 @@ public class BankMapper {
                 creditTypesCost,
                 loanOffersCost
         );
-    } // сам дурак
+    }
 
 
     public Bank toBankEntity(BankCreateDTO dto) {

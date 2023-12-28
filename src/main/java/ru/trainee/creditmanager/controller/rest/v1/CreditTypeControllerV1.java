@@ -17,8 +17,10 @@ import ru.trainee.creditmanager.dto.PageableListResponseDTO;
 import ru.trainee.creditmanager.dto.creditType.CreditTypeCreateDTO;
 import ru.trainee.creditmanager.dto.creditType.CreditTypeResponseDetailDTO;
 import ru.trainee.creditmanager.dto.creditType.CreditTypeResponseShortDTO;
+import ru.trainee.creditmanager.dto.creditType.CreditTypeUpdateDTO;
 import ru.trainee.creditmanager.entity.CreditType;
 import ru.trainee.creditmanager.mapper.creditType.CreditTypeMapper;
+import ru.trainee.creditmanager.repository.BankRepository;
 import ru.trainee.creditmanager.service.CreditTypeService;
 
 import java.util.Objects;
@@ -48,7 +50,7 @@ public class CreditTypeControllerV1 {
             @Schema(implementation = CreditTypeResponseDetailDTO.class))})
     public CreditTypeResponseDetailDTO create(@RequestBody CreditTypeCreateDTO dto) {
 
-        CreditType creditType = creditTypeService.findByName(dto.getName());
+        CreditType creditType = creditTypeService.findByName(dto.name());
         if(Objects.isNull(creditType)){
             return creditTypeMapper.toCreditTypeDetailDto(
                     creditTypeService.create(
@@ -112,10 +114,11 @@ public class CreditTypeControllerV1 {
                               """
     )
     @ResponseStatus(HttpStatus.OK)
-    public CreditTypeResponseDetailDTO update(@RequestBody CreditTypeCreateDTO dto){
+    public CreditTypeResponseDetailDTO update(@RequestBody CreditTypeUpdateDTO dto){
+
         return creditTypeMapper.toCreditTypeDetailDto(
                 creditTypeService.update(
-                        creditTypeMapper.toCreditTypeEntity(dto))
+                        creditTypeMapper.toCreditTypeEntity(creditTypeService.findById(dto.id()), dto))
         );
     }
 

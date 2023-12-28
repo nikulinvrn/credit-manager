@@ -1,10 +1,12 @@
 package ru.trainee.creditmanager.mapper.customer;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.trainee.creditmanager.dto.customer.CustomerCreateDTO;
 import ru.trainee.creditmanager.dto.customer.CustomerResponseDetailDTO;
 import ru.trainee.creditmanager.dto.customer.CustomerResponseShortDTO;
+import ru.trainee.creditmanager.dto.customer.CustomerUpdateDTO;
 import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseShortDTO;
 import ru.trainee.creditmanager.entity.Customer;
 import ru.trainee.creditmanager.mapper.bank.BankMapper;
@@ -23,7 +25,6 @@ public class CustomerMapper {
     private final BankMapper bankMapper;
     private final CreditTypeMapper creditTypeMapper;
 
-    private final CustomerService customerService;
 
     public CustomerResponseShortDTO toCustomerShortDto(Customer customer) {
         return new CustomerResponseShortDTO(
@@ -69,34 +70,43 @@ public class CustomerMapper {
         );
     }
 
+    /**
+     * @param dto объект типа CustomerCreateDTO
+     * @return объект класса Customer со значением полей baks и loanOffers равным null
+     */
     public Customer toCustomerEntity(CustomerCreateDTO dto) {
 
-        Customer customer = customerService.findBySeriesAndNumber(
+        return new Customer(
+                null,
+                dto.firstname(),
+                dto.lastname(),
+                dto.surname(),
                 dto.series(),
-                dto.number()
-        );
+                dto.number(),
+                dto.email(),
+                dto.isActive(),
+                null,
+                null);
+    }
 
-        if(Objects.nonNull(customer)){
-            customer.setFirstname(dto.firstname());
-            customer.setLastname(dto.lastname());
-            customer.setSurname(dto.surname());
-            customer.setEmail(dto.email());
-            customer.setActive(dto.isActive());
 
-            return customer;
-        } else {
-            return new Customer(
-                    null,
-                    dto.firstname(),
-                    dto.lastname(),
-                    dto.surname(),
-                    dto.series(),
-                    dto.number(),
-                    dto.email(),
-                    dto.isActive(),
-                    null,
-                    null);
-        }
+    /**
+     * Метод для создания нового объекта типа Customer на основании CustomerUpdateDTO
+     *
+     * @param customer объект типа Customer, который будет изменен
+     * @param dto      объект типа CustomerUpdateDto, на основании данных которого будет
+     *                 изменяться объект customer
+     * @return новый объект типа Customer
+     */
+    public Customer toCustomerEntity(Customer customer, CustomerUpdateDTO dto) {
+
+        customer.setFirstname(dto.firstname());
+        customer.setLastname(dto.lastname());
+        customer.setSurname(dto.surname());
+        customer.setEmail(dto.email());
+        customer.setActive(dto.isActive());
+
+        return customer;
     }
 }
 
