@@ -34,8 +34,6 @@ public class LoanOfferMapper {
     }
 
     public LoanOfferResponseDetailDTO toLoanOfferDetailDto(LoanOffer loanOffer) {
-        List<Payment> payments = loanOffer.getPaymentSchedule();
-        payments.forEach(p -> p.setLoanOffer(null));
 
         return new LoanOfferResponseDetailDTO(
                 loanOffer.getId(),

@@ -2,6 +2,7 @@ package ru.trainee.creditmanager.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.trainee.creditmanager.entity.CreditType;
 import ru.trainee.creditmanager.entity.LoanOffer;
 import ru.trainee.creditmanager.entity.Payment;
@@ -34,22 +35,31 @@ public class LoanOfferServiceImpl
     private final PaymentService paymentService;
 
 
+    @Transactional
     public LoanOffer create(LoanOffer offer,
                             Integer amountRequested,
                             Integer loanTerm,
                             CreditType creditType) {
         offer = repository.save(offer);
 
-        paymentService.saveAll(
-                paymentScheduleGenerate(offer.getId(),
-                        amountRequested,
-                        loanTerm,
-                        creditType));
+        List<Payment> payments = paymentScheduleGenerate(offer.getId(),
+                amountRequested,
+                loanTerm,
+                creditType);
+        paymentService.saveAll(payments);
 
-        return repository.findById(offer.getId()).orElseThrow(
+        LoanOffer response = repository.findById(offer.getId()).orElseThrow(
                 () -> new EntityNotFoundException("Loan offer not found after creating. " +
                         "Check full list offers.")
         );
+        response.setPaymentSchedule(payments);
+
+        return response;
+
+        // TODO: прояснить момент с ожиданием выполнения запроса на сохранение всех платежей
+        /* На данный момент вывод списка платежей из переменной — это костыль.
+         * Где гарантия, что не выведется несуществующее КП клиенту при откате
+         * транзакции при сбое в сохранении платежей? */
     }
 
     @Override
