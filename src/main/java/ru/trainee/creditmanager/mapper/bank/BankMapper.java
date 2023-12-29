@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.trainee.creditmanager.dto.bank.BankCreateDTO;
 import ru.trainee.creditmanager.dto.bank.BankResponseDetailDTO;
 import ru.trainee.creditmanager.dto.bank.BankResponseShortDTO;
+import ru.trainee.creditmanager.dto.bank.BankUpdateDTO;
 import ru.trainee.creditmanager.entity.Bank;
 
 @Service
@@ -40,5 +41,12 @@ public class BankMapper {
                 null,
                 null
         );
+    }
+
+    public Bank toBankEntity(Bank bank, BankUpdateDTO dto) {
+
+        bank.setName(dto.name());
+
+        return bank;
     }
 }

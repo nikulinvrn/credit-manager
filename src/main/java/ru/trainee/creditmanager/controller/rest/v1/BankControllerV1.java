@@ -16,6 +16,7 @@ import ru.trainee.creditmanager.dto.PageableListResponseDTO;
 import ru.trainee.creditmanager.dto.bank.BankCreateDTO;
 import ru.trainee.creditmanager.dto.bank.BankResponseDetailDTO;
 import ru.trainee.creditmanager.dto.bank.BankResponseShortDTO;
+import ru.trainee.creditmanager.dto.bank.BankUpdateDTO;
 import ru.trainee.creditmanager.dto.creditType.CreditTypeResponseShortDTO;
 import ru.trainee.creditmanager.dto.customer.CustomerResponseShortDTO;
 import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseShortDTO;
@@ -46,7 +47,6 @@ public class BankControllerV1 {
     private final LoanOfferMapper loanOfferMapper;
 
 
-
     @PostMapping
     @Operation(
             summary = "Создание нового банка",
@@ -63,7 +63,7 @@ public class BankControllerV1 {
             @Schema(implementation = BankResponseDetailDTO.class))})
     public BankResponseDetailDTO create(@RequestBody BankCreateDTO dto) {
         Bank bank = bankService.getBankByName(dto.getName());
-        if(Objects.nonNull(bank)){
+        if (Objects.nonNull(bank)) {
             return bankMapper.toBankDetailDto(
                     bankService.create(
                             bankMapper.toBankEntity(dto))
@@ -80,7 +80,7 @@ public class BankControllerV1 {
     )
     public BankResponseDetailDTO findById(@PathVariable UUID id) {
         Bank bank = bankService.findById(id);
-        if(Objects.nonNull(bank)){
+        if (Objects.nonNull(bank)) {
             return bankMapper.toBankDetailDto(bank);
         } else {
             throw new EntityNotFoundException("Bank " + id + " not found! Check id.");
@@ -88,13 +88,12 @@ public class BankControllerV1 {
     }
 
 
-
     @GetMapping
     @Operation(
             summary = "Получение списка банков",
             description = "Список содержит только перечень идентификаторов и названий банков."
     )
-    public PageableListResponseDTO<BankResponseShortDTO> readAll(Pageable p){
+    public PageableListResponseDTO<BankResponseShortDTO> readAll(Pageable p) {
 
         Page<Bank> page = bankService.readAll(p);
 
@@ -114,7 +113,7 @@ public class BankControllerV1 {
             summary = "Получение перечня клиентов банка",
             description = "Содержит краткие карточки клиентов"
     )
-    public PageableListResponseDTO<CustomerResponseShortDTO> getBankCustomersById(@PathVariable UUID id, Pageable p){
+    public PageableListResponseDTO<CustomerResponseShortDTO> getBankCustomersById(@PathVariable UUID id, Pageable p) {
 
         Page<Customer> page = bankService.getBankCustomersById(id, p);
 
@@ -129,13 +128,12 @@ public class BankControllerV1 {
     }
 
 
-
     @GetMapping("/{id}/credit-types")
     @Operation(
             summary = "Получение перечня типов кредитов банка",
             description = "Содержит краткие карточки типов кредитов"
     )
-    public PageableListResponseDTO<CreditTypeResponseShortDTO> getBankCreditTypesById(@PathVariable UUID id, Pageable p){
+    public PageableListResponseDTO<CreditTypeResponseShortDTO> getBankCreditTypesById(@PathVariable UUID id, Pageable p) {
 
         Page<CreditType> page = bankService.getBankCreditTypesById(id, p);
 
@@ -150,13 +148,12 @@ public class BankControllerV1 {
     }
 
 
-
     @GetMapping("/{id}/loan-offers")
     @Operation(
             summary = "Получение перечня кредитных предложений банка",
             description = "Содержит краткие карточки кредитных предложений"
     )
-    public PageableListResponseDTO<LoanOfferResponseShortDTO> getBankLoanOffersById(@PathVariable UUID id, Pageable p){
+    public PageableListResponseDTO<LoanOfferResponseShortDTO> getBankLoanOffersById(@PathVariable UUID id, Pageable p) {
 
         Page<LoanOffer> page = bankService.getBankLoanOffersById(id, p);
 
@@ -171,8 +168,23 @@ public class BankControllerV1 {
     }
 
 
+    @PutMapping("/{id}")
+    @Operation(
+            summary = "Корректирование информации о банке",
+            description = """
+                        Обязательным полем является id. Через данный метод можно изменить
+                        название банка. Остальные поля изменяются через соответствующие контроллеры.
+                        """
+    )
+    public BankResponseDetailDTO update(@RequestBody BankUpdateDTO dto){
 
-    // TODO: а где Update для банка???
+        return bankMapper.toBankDetailDto(
+                bankService.update(
+                        bankMapper.toBankEntity(bankService.findById(dto.id()), dto))
+        );
+    }
+
+
 
     @DeleteMapping("/{id}")
     @Operation(
@@ -182,7 +194,7 @@ public class BankControllerV1 {
                     типы кредитов, кредитные предложения.
                     """
     )
-    public void deleteBankById(@PathVariable UUID id){
+    public void deleteBankById(@PathVariable UUID id) {
         bankService.delete(id);
     }
 }
