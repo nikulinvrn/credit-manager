@@ -1,16 +1,16 @@
 package ru.trainee.creditmanager.service;
 
-import ru.trainee.creditmanager.dto.loanOffer.LoanOfferCreateDTO;
-import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseDetailDTO;
+import ru.trainee.creditmanager.entity.CreditType;
+import ru.trainee.creditmanager.entity.LoanOffer;
 
 import java.util.UUID;
 
-public interface LoanOfferService {
+public interface LoanOfferService extends CommonService<LoanOffer>{
 
-    LoanOfferResponseDetailDTO create(LoanOfferCreateDTO dto);
-
-    LoanOfferResponseDetailDTO findById(UUID id);
-
+    LoanOffer create(LoanOffer offer,
+                     Integer amountRequested,
+                     Integer loanTerm,
+                     CreditType creditType);
 
     void deleteById(UUID id);
 

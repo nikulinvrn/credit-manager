@@ -2,12 +2,19 @@ package ru.trainee.creditmanager.controller.rest.v1;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.trainee.creditmanager.dto.loanOffer.LoanOfferCreateDTO;
 import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseDetailDTO;
+import ru.trainee.creditmanager.entity.LoanOffer;
+import ru.trainee.creditmanager.mapper.loanOffer.LoanOfferMapper;
+import ru.trainee.creditmanager.service.BankService;
+import ru.trainee.creditmanager.service.CreditTypeService;
+import ru.trainee.creditmanager.service.CustomerService;
 import ru.trainee.creditmanager.service.LoanOfferService;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -17,6 +24,12 @@ import java.util.UUID;
 public class LoanOfferControllerV1 {
 
     private final LoanOfferService loanOfferService;
+
+    private final CustomerService customerService;
+    private final BankService bankService;
+    private final CreditTypeService creditTypeService;
+
+    private final LoanOfferMapper loanOfferMapper;
 
     @PostMapping
     @Operation(
@@ -29,9 +42,17 @@ public class LoanOfferControllerV1 {
                     """
     )
     public LoanOfferResponseDetailDTO create(@RequestBody LoanOfferCreateDTO dto) {
-        return loanOfferService.create(dto);
+        return loanOfferMapper.toLoanOfferDetailDto(
+                loanOfferService.create(
+                        loanOfferMapper.toLoanOfferCreateEntityWithoutPayments(
+                                customerService.findById(dto.customerId()),
+                                bankService.findById(dto.bankId()),
+                                creditTypeService.findById(dto.creditTypeId())),
+                        dto.amountRequested(),
+                        dto.loanTerm(),
+                        creditTypeService.findById(dto.creditTypeId()))
+        );
     }
-
 
     @GetMapping("/{id}")
     @Operation(
@@ -42,9 +63,13 @@ public class LoanOfferControllerV1 {
     )
     public LoanOfferResponseDetailDTO findById(@PathVariable UUID id) {
 
-        return loanOfferService.findById(id);
+        LoanOffer offer = loanOfferService.findById(id);
+        if(Objects.nonNull(offer)){
+            return loanOfferMapper.toLoanOfferDetailDto(offer);
+        } else {
+            throw new EntityNotFoundException("Loan offer id: " + id + " not found.");
+        }
     }
-
 
 
     @GetMapping("{id}/accept")

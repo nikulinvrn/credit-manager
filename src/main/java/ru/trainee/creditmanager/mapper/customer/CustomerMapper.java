@@ -1,6 +1,5 @@
 package ru.trainee.creditmanager.mapper.customer;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.trainee.creditmanager.dto.customer.CustomerCreateDTO;
@@ -11,8 +10,6 @@ import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseShortDTO;
 import ru.trainee.creditmanager.entity.Customer;
 import ru.trainee.creditmanager.mapper.bank.BankMapper;
 import ru.trainee.creditmanager.mapper.creditType.CreditTypeMapper;
-import ru.trainee.creditmanager.service.BankService;
-import ru.trainee.creditmanager.service.CustomerService;
 
 import java.util.ArrayList;
 import java.util.List;

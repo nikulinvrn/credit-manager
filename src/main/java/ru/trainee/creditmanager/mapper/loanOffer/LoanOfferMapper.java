@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseDetailDTO;
 import ru.trainee.creditmanager.dto.loanOffer.LoanOfferResponseShortDTO;
-import ru.trainee.creditmanager.entity.LoanOffer;
-import ru.trainee.creditmanager.entity.Payment;
+import ru.trainee.creditmanager.entity.*;
 import ru.trainee.creditmanager.mapper.bank.BankMapper;
 import ru.trainee.creditmanager.mapper.creditType.CreditTypeMapper;
 import ru.trainee.creditmanager.mapper.customer.CustomerMapper;
@@ -52,5 +51,19 @@ public class LoanOfferMapper {
                 loanOffer.isActive(),
                 loanOffer.isAccepted()
         );
+    }
+
+    public LoanOffer toLoanOfferCreateEntityWithoutPayments(
+                Customer customer,
+                Bank bank,
+                CreditType creditType){
+        LoanOffer offer = new LoanOffer();
+        offer.setCustomer(customer);
+        offer.setBank(bank);
+        offer.setCreditType(creditType);
+        offer.setActive(true); // по умолчанию активно
+        offer.setAccepted(false); // по умолчанию не принято
+
+        return offer;
     }
 }

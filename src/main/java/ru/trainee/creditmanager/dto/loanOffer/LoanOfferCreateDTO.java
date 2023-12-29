@@ -1,9 +1,10 @@
 package ru.trainee.creditmanager.dto.loanOffer;
 
-public record LoanOfferCreateDTO(Long passportSeries,
-                                 Long passportNumber,
-                                 String bankName,
-                                 String creditTypeName,
+import java.util.UUID;
+
+public record LoanOfferCreateDTO(UUID customerId,
+                                 UUID bankId,
+                                 UUID creditTypeId,
                                  Integer loanTerm,
                                  Integer amountRequested) {
 }
