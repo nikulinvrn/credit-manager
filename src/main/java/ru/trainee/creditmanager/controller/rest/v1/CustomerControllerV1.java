@@ -16,6 +16,7 @@ import ru.trainee.creditmanager.dto.PageableListResponseDTO;
 import ru.trainee.creditmanager.dto.customer.CustomerCreateDTO;
 import ru.trainee.creditmanager.dto.customer.CustomerResponseDetailDTO;
 import ru.trainee.creditmanager.dto.customer.CustomerResponseShortDTO;
+import ru.trainee.creditmanager.dto.customer.CustomerUpdateDTO;
 import ru.trainee.creditmanager.entity.Customer;
 import ru.trainee.creditmanager.mapper.customer.CustomerMapper;
 import ru.trainee.creditmanager.service.CustomerService;
@@ -135,10 +136,10 @@ public class CustomerControllerV1 {
                           """
     )
     @ResponseStatus(HttpStatus.OK)
-    public CustomerResponseDetailDTO update(@RequestBody CustomerCreateDTO dto) {
+    public CustomerResponseDetailDTO update(@RequestBody CustomerUpdateDTO dto) {
         return customerMapper.toCustomerDetailDto(
                 customerService.update(
-                        customerMapper.toCustomerEntity(dto))
+                        customerMapper.toCustomerEntity(customerService.findById(dto.id()), dto))
         );
     }
 

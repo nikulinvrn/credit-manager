@@ -10,6 +10,6 @@ public record CreditTypeUpdateDTO(UUID id,
                                   Integer creditLimit,
                                   @JsonProperty("interest_rate")
                                   Double interestRate,
-                                  @JsonProperty("bank_name")
-                                  String bankName) {
+                                  @JsonProperty("bank_id")
+                                  UUID bankId) {
 }
