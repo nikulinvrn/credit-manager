@@ -18,4 +18,16 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
                 .body(new ApiError<>(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
 
+    @ExceptionHandler({CreditLimitExceedException.class})
+    protected ResponseEntity<ApiError<?>> creditLimitExceededException(Exception exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiError<>(HttpStatus.BAD_REQUEST, exception.getMessage()));
+    }
+
+    @ExceptionHandler({BusinessException.class})
+    protected ResponseEntity<ApiError<?>> businessException(Exception exception) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiError<>(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+    }
+
 }

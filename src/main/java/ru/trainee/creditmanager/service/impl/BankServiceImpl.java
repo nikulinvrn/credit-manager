@@ -169,9 +169,6 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public void deleteById(Long id) {
-        // Банк нельзя удалять, пока он содержит хотя бы одного активного клиента или активное кредитное предложение
-        // ... но оставим это на потом (на фронте допилят, ага), а каскадное удаление разрешим на уровне БД =)
-
         bankRepository.deleteById(id);
     }
 

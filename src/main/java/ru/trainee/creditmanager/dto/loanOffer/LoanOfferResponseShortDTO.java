@@ -4,6 +4,8 @@ import lombok.*;
 import ru.trainee.creditmanager.dto.bank.BankResponseShortDTO;
 import ru.trainee.creditmanager.dto.creditType.CreditTypeResponseShortDTO;
 
+import java.math.BigDecimal;
+
 @EqualsAndHashCode
 @Builder
 @AllArgsConstructor
@@ -13,9 +15,10 @@ import ru.trainee.creditmanager.dto.creditType.CreditTypeResponseShortDTO;
 public class LoanOfferResponseShortDTO {
 
     Long id;
+//    BankResponseShortDTO bank;
     BankResponseShortDTO bank;
     CreditTypeResponseShortDTO creditType;
-    Integer sumOfCredit;
+    BigDecimal sumOfCredit;
     boolean isActive;
     boolean isAccepted;
 }

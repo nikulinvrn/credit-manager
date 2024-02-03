@@ -29,6 +29,10 @@ public class BankControllerV1 {
     private final BankService bankService;
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Просмотр карточки банка",
+            description = "Просмотр информации о банке: клиенты, типы кредитов, кредитные предложения."
+    )
     public BankResponseDetailDTO getBankById(@PathVariable Long id) {
         return bankService.getBankById(id);
     }
