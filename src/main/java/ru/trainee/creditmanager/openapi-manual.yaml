@@ -1,0 +1,830 @@
+openapi: 3.0.1
+info:
+  title: Credit Management System Api
+  description: 'Учебный проект.'
+  contact:
+    name: Nikulin M. A.
+    email: nikulin.vrn@bk.ru
+  version: 0.0.01
+servers:
+  - url: http://localhost:8081
+    description: Generated server url
+tags:
+  - name: Клиенты
+    description: Операции над личными карточками клиентов
+  - name: Банки
+    description: Операции над карточками банков
+  - name: Типы кредитов
+    description: Операции над карточками типов кредитов
+paths:
+  /api/v1/credit-types:
+    get:
+      tags:
+        - Типы кредитов
+      summary: Получение списка всех типов кредитов
+      description: |
+        Список содержит краткие карточки типов кредитов.
+      operationId: readAll
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditTypeResponseShortDTO'
+    put:
+      tags:
+        - Типы кредитов
+      summary: Обновление карточки типа кредита
+      description: |
+        Обновление информации в карточке типа.
+        Обязательным полем в теле запроса является id. Остальные
+        поля заполняются только если необходимо внести изменения.
+      operationId: update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditTypeUpdateDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CreditTypeResponseDetailDTO'
+    post:
+      tags:
+        - Типы кредитов
+      summary: Создание нового типа кредитов
+      description: |
+        Метод возвращает детализированное представление карточки созданного типа.
+        В случае, если в базе уже существует тип кредита с указанным именем,
+        то возвращается карточка существующего типа.
+      operationId: create_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditTypeCreateDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditTypeResponseDetailDTO'
+  /api/v1/clients:
+    get:
+      tags:
+        - Клиенты
+      summary: Получение списка всех клиентов
+      description: |
+        Список не содержит банков, услугами которых
+        пользуется клиент, и персональных кредитных предложений.
+      operationId: getAllCustomers
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerResponseShortDTO'
+    put:
+      tags:
+        - Клиенты
+      summary: Обновление карточки клиента
+      description: |
+        Обновление информации в личной карточке клиента.
+        Обязательным полем в теле запроса является id. Остальные
+        поля заполняются только если необходимо внести изменения.
+      operationId: update_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerUpdateDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomerResponseDetailDTO'
+    post:
+      tags:
+        - Клиенты
+      summary: Создание нового пользователя
+      description: |
+        Метод возвращает детализированное представление личной
+        карточки созданного пользователя. Новый пользователь по умолчанию является активным.
+        В случае, если в базе уже существует пользователь с представленными
+        серией и номером паспорта, то возвращается личная карточка существующего пользователя.
+      operationId: create_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerCreateDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponseDetailDTO'
+  /api/v1/offers:
+    post:
+      tags:
+        - loan-offer-controller-v-1
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoanOfferCreateDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/LoanOfferResponseDetailDTO'
+  /api/v1/banks:
+    get:
+      tags:
+        - Банки
+      summary: Получение списка банков
+      description: Список содержит только перечень идентификаторов и названий банков.
+      operationId: getAllBanks
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankResponseShortDTO'
+    post:
+      tags:
+        - Банки
+      summary: Создание нового банка
+      description: |
+        Метод возвращает детализированное представление
+        карточки созданного банка.
+        В случае, если в базе уже существует создаваемый банк
+        (проверка по имени), то возвращается карточка
+        существующего банка.
+      operationId: create_3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankCreateDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankResponseDetailDTO'
+  /api/v1/credit-types/{id}:
+    get:
+      tags:
+        - Типы кредитов
+      summary: Получение карточки типа кредита
+      description: |
+        Карточка типа кредита содержит...
+      operationId: findById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CreditTypeResponseDetailDTO'
+    delete:
+      tags:
+        - Типы кредитов
+      summary: Удаление карточки типа кредита
+      description: |
+        Карточка просто удаляется...
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+  /api/v1/clients/{id}:
+    get:
+      tags:
+        - Клиенты
+      summary: Получение карточки клиента
+      description: |
+        Карточка клиента содержит основные персональные данные,
+        включая персональные кредитные предложения.
+      operationId: getCustomerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomerResponseDetailDTO'
+    delete:
+      tags:
+        - Клиенты
+      summary: Деактивация карточки клиента
+      description: |
+        Карточка клиента не отображается в списке клиентов, но не удаляется из БД.
+        При необходимости её снова можно активировать.
+      operationId: deactivate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomerResponseDetailDTO'
+  /api/v1/clients/{id}/activate:
+    get:
+      tags:
+        - Клиенты
+      summary: Активация карточки клиента
+      description: Карточка клиента снова отображается в списке клиентов.
+      operationId: activate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomerResponseDetailDTO'
+  /api/v1/clients/trash-box:
+    get:
+      tags:
+        - Клиенты
+      summary: (Административное) Получение списка неактивных клиентов
+      description: Может быть необходимо для дальнейшей активации карточки по id.
+      operationId: getAllInactiveCustomers
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerResponseShortDTO'
+  /api/v1/banks/{id}:
+    get:
+      tags:
+        - Банки
+      operationId: getBankById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BankResponseDetailDTO'
+    delete:
+      tags:
+        - Банки
+      summary: Удаление банка
+      description: |
+        Удаление банка и каскадное удаление всех дочерних сущностей:
+        типы кредитов, кредитные предложения.
+      operationId: deleteBankById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+  /api/v1/banks/{id}/loan-offers:
+    get:
+      tags:
+        - Банки
+      summary: Получение перечня кредитных предложений банка
+      description: Содержит краткие карточки кредитных предложений
+      operationId: getBankLoanOffersById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageableListResponseDTOLoanOfferResponseShortDTO'
+  /api/v1/banks/{id}/customers:
+    get:
+      tags:
+        - Банки
+      summary: Получение перечня клиентов банка
+      description: Содержит краткие карточки клиентов
+      operationId: getBankCustomersById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageableListResponseDTOCustomerResponseShortDTO'
+  /api/v1/banks/{id}/credit-types:
+    get:
+      tags:
+        - Банки
+      summary: Получение перечня типов кредитов банка
+      description: Содержит краткие карточки типов кредитов
+      operationId: getBankCreditTypesById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageableListResponseDTOCreditTypeResponseShortDTO'
+components:
+  schemas:
+    CreditTypeUpdateDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        credit_limit:
+          type: integer
+          format: int32
+        interest_rate:
+          type: number
+          format: double
+        bank_name:
+          type: string
+    CreditTypeResponseDetailDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        credit_limit:
+          type: integer
+          format: int32
+        interest_rate:
+          type: number
+          format: double
+        bank_name:
+          type: string
+    CustomerUpdateDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstname:
+          type: string
+        lastname:
+          type: string
+        surname:
+          type: string
+        series:
+          type: integer
+          format: int64
+        number:
+          type: integer
+          format: int64
+        email:
+          type: string
+    BankResponseShortDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    CreditTypeResponseShortDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        bank:
+          type: string
+        interestRate:
+          type: number
+          format: double
+    CustomerResponseDetailDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstname:
+          type: string
+        lastname:
+          type: string
+        surname:
+          type: string
+        series:
+          type: integer
+          format: int64
+        number:
+          type: integer
+          format: int64
+        email:
+          type: string
+        loanOffers:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoanOfferResponseShortDTO'
+        active:
+          type: boolean
+    LoanOfferResponseShortDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        bank:
+          $ref: '#/components/schemas/BankResponseShortDTO'
+        creditType:
+          $ref: '#/components/schemas/CreditTypeResponseShortDTO'
+        sumOfCredit:
+          type: integer
+          format: int32
+        active:
+          type: boolean
+        accepted:
+          type: boolean
+    LoanOfferCreateDTO:
+      type: object
+      properties:
+        passportSeries:
+          type: integer
+          format: int64
+        passportNumber:
+          type: integer
+          format: int64
+        bankName:
+          type: string
+        creditTypeName:
+          type: string
+        loanTerm:
+          type: integer
+          format: int32
+        amountRequested:
+          type: integer
+          format: int32
+    CustomerResponseShortDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstname:
+          type: string
+        lastname:
+          type: string
+        surname:
+          type: string
+        series:
+          type: integer
+          format: int64
+        number:
+          type: integer
+          format: int64
+        email:
+          type: string
+        active:
+          type: boolean
+    LoanOfferResponseDetailDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        customer:
+          $ref: '#/components/schemas/CustomerResponseShortDTO'
+        bank:
+          $ref: '#/components/schemas/BankResponseShortDTO'
+        creditType:
+          $ref: '#/components/schemas/CreditTypeResponseShortDTO'
+        paymentSchedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentResponseShortDTO'
+        principalOfCredit:
+          type: integer
+          format: int32
+        sumOfInterest:
+          type: integer
+          format: int32
+        sumOfCredit:
+          type: integer
+          format: int32
+        active:
+          type: boolean
+        accepted:
+          type: boolean
+    PaymentResponseShortDTO:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        principalOfPayment:
+          type: number
+          format: double
+        interestOfPayment:
+          type: number
+          format: double
+        sumOfPayment:
+          type: number
+          format: double
+        balanceOfDebt:
+          type: number
+          format: double
+    CreditTypeCreateDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        credit_limit:
+          type: integer
+          format: int32
+        interest_rate:
+          type: number
+          format: double
+        bank_name:
+          type: string
+    CustomerCreateDTO:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        surname:
+          type: string
+        series:
+          type: integer
+          format: int64
+        number:
+          type: integer
+          format: int64
+        email:
+          type: string
+    BankCreateDTO:
+      type: object
+      properties:
+        name:
+          type: string
+    BankResponseDetailDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        customers:
+          type: integer
+          format: int32
+        credit_types:
+          type: integer
+          format: int32
+        loan_offers:
+          type: integer
+          format: int32
+    PageableListResponseDTOLoanOfferResponseShortDTO:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        page_size:
+          type: integer
+          format: int32
+        total_items:
+          type: integer
+          format: int64
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoanOfferResponseShortDTO'
+    PageableListResponseDTOCustomerResponseShortDTO:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        page_size:
+          type: integer
+          format: int32
+        total_items:
+          type: integer
+          format: int64
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerResponseShortDTO'
+    PageableListResponseDTOCreditTypeResponseShortDTO:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        page_size:
+          type: integer
+          format: int32
+        total_items:
+          type: integer
+          format: int64
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditTypeResponseShortDTO'
